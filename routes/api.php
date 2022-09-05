@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\OrganisationCategoryController;
+use App\Http\Controllers\Api\OrganisationController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +17,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::apiResources([
+    'organisations' => OrganisationController::class,
+    'organisation-categories' => OrganisationCategoryController::class,
+]);
+
+Route::group(['prefix' => 'users', 'as' => 'users.'],function() {
+    Route::get('/', [UserController::class,'listOrganisationUsers']);
+    Route::get('/{id}', [UserController::class,'show']);
+    Route::post('/validate-email', [UserController::class,'startEmailSignup']);
+    Route::post('/register', [UserController::class,'register']);
+    Route::post('/login', [UserController::class,'authenticate']);
+    Route::delete('/logout/{token}', [UserController::class,'deauthenticate']);
+    Route::post('/update-status/{id}', [UserController::class,'updateStatus']);
+    Route::post('/update-user/{id}', [UserController::class,'updateUser']);
+    Route::delete('/delete/{id}', [UserController::class,'destroy']);
 });

@@ -16,5 +16,9 @@ return [
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'user_not_approved' => 'User is not approved to use system.',
+    'user_banned' => 'User has been banned from using the system',
+    'verification_sent' => 'Verification code has been sent',
+    'invalid_code' => 'Code is not valid',
 
 ];
