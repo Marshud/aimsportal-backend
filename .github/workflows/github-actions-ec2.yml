@@ -23,3 +23,6 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
           EXCLUDE: ".git, .github"
+      
+      - name: Update server requirements
+        run: .scripts/deploy.sh
