@@ -26,3 +26,4 @@ jobs:
       
       # - name: Update server requirements
       #   run: .scripts/deploy.sh
+ 
