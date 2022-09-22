@@ -7,9 +7,6 @@ echo "Deployment started ..."
 # if already is in maintenance mode
 (php artisan down) || true
 
-# Pull the latest version of the app
-git pull origin production
-
 # Install composer dependencies
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
@@ -24,6 +21,9 @@ php artisan optimize
 
 # Run database migrations
 php artisan migrate --force
+
+# Run database migrations
+php artisan db:seed 
 
 # Exit maintenance mode
 php artisan up
