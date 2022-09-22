@@ -35,12 +35,12 @@ jobs:
       - name: Recreate cache by Optimizing
         run: php artisan optimize
 
-      - name: Run DB Migrations
-        run: php artisan migrate --force
+      # - name: Run DB Migrations
+      #   run: php artisan migrate --force
 
-      - name: Seed the database
-        run: php artisan db:seed
+      # - name: Seed the database
+      #   run: php artisan db:seed
       
-      
+
       
  
