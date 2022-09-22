@@ -28,11 +28,12 @@ Route::apiResources([
 
 Route::group(['prefix' => 'users', 'as' => 'users.'],function() {
     Route::get('/', [UserController::class,'listOrganisationUsers']);
+    Route::get('/profile', [UserController::class,'profile']);
     Route::get('/{id}', [UserController::class,'show']);
     Route::post('/validate-email', [UserController::class,'startEmailSignup']);
     Route::post('/register', [UserController::class,'register']);
     Route::post('/login', [UserController::class,'authenticate']);
-    Route::delete('/logout/{token}', [UserController::class,'deauthenticate']);
+    Route::delete('/logout', [UserController::class,'deauthenticate']);
     Route::post('/update-status/{id}', [UserController::class,'updateStatus']);
     Route::post('/update-user/{id}', [UserController::class,'updateUser']);
     Route::delete('/delete/{id}', [UserController::class,'destroy']);

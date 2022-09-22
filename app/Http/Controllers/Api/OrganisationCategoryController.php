@@ -51,7 +51,7 @@ class OrganisationCategoryController extends Controller
             return response()->error(__('messages.not_found'),404);
         }
         $validator = Validator::make($request->all(),[
-            'name' => "required|unique:organisation_categories,$id",
+            'name' => "required|unique:organisation_categories,name,$id",
         ]);
 
         if ($validator->fails()) {
