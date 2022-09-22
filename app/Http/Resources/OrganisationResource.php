@@ -22,8 +22,10 @@ class OrganisationResource extends JsonResource
             'contact_person_name' => $this->contact_person_name,
             'contact_person_email' => $this->contact_person_email,
             'approved' => $this->approved,
-            'number_of_users' => $this->users->count(),
-            'category' => $this->category->name ?? 'none'
+            'number_of_users' => $this->team_users->count(),
+            'category' => $this->category->name ?? 'none',
+            'category_id' => $this->category_id,
+            'description' => $this->description,
         ];
     }
 }

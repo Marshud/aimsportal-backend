@@ -199,7 +199,7 @@ class UserController extends Controller
         $aims_user->status = $request->status;
         $aims_user->save();
 
-        return response()->success([]);
+        return response()->success(['message' => __('messages.success')]);
     }
 
     public function updateUser(Request $request, $id)

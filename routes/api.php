@@ -26,6 +26,8 @@ Route::apiResources([
     'organisation-categories' => OrganisationCategoryController::class,
 ]);
 
+Route::get('organisations/{id}/users', [OrganisationController::class, 'listOrganisationUsers']);
+
 Route::group(['prefix' => 'users', 'as' => 'users.'],function() {
     Route::get('/', [UserController::class,'listOrganisationUsers']);
     Route::get('/profile', [UserController::class,'profile']);
