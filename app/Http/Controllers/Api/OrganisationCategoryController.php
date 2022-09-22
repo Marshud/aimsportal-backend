@@ -21,7 +21,7 @@ class OrganisationCategoryController extends Controller
     {
         if (!$request->user()->isAbleTo('create-organisation-categories'))
         {
-            return response()->error('Unauthorized',403); 
+            return response()->error('Unauthorized', 403); 
         }
         $validator = Validator::make($request->all(),[
             'name' => 'required|unique:organisation_categories',
@@ -29,7 +29,7 @@ class OrganisationCategoryController extends Controller
 
         if ($validator->fails()) {
 			
-			return response()->error(__('messages.invalid_request'),422,$validator->messages()->toArray());
+			return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
         $category = new OrganisationCategory;
@@ -43,12 +43,12 @@ class OrganisationCategoryController extends Controller
     {
         if (!$request->user()->isAbleTo('update-organisation-categories'))
         {
-            return response()->error('Unauthorized',403); 
+            return response()->error('Unauthorized', 403); 
         }
         $category = OrganisationCategory::find($id);
         if (!$category)
         {
-            return response()->error(__('messages.not_found'),404);
+            return response()->error(__('messages.not_found'), 404);
         }
         $validator = Validator::make($request->all(),[
             'name' => "required|unique:organisation_categories,name,$id",
@@ -56,7 +56,7 @@ class OrganisationCategoryController extends Controller
 
         if ($validator->fails()) {
 			
-			return response()->error(__('messages.invalid_request'),422,$validator->messages()->toArray());
+			return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
         
         $category->name = $request->name;
@@ -69,11 +69,11 @@ class OrganisationCategoryController extends Controller
     {
         if (!$request->user()->isAbleTo('view-organisation-categories'))
         {
-            return response()->error('Unauthorized',403); 
+            return response()->error('Unauthorized', 403); 
         }
         $category = OrganisationCategory::find($id);
         if (!$category) {
-            return response()->error(__('messages.not_found'),404);
+            return response()->error(__('messages.not_found'), 404);
         }
 
         return response()->success(new OrganisationCategoryResource($category));
@@ -88,16 +88,16 @@ class OrganisationCategoryController extends Controller
     {
         if (!$request->user()->isAbleTo('delete-organisation-categories'))
         {
-            return response()->error('Unauthorized',403); 
+            return response()->error('Unauthorized', 403); 
         }
 
         $category = OrganisationCategory::find($id);
         if (!$category) {
-            return response()->error(__('messages.not_found'),404);
+            return response()->error(__('messages.not_found'), 404);
         }
 
-        if ($category->organisations) {
-            return response()->error(__('messages.error_delete'),500);
+        if ($category->organisations()->exists()) {
+            return response()->error(__('messages.error_delete'), 400);
         }
 
         $category->delete();
