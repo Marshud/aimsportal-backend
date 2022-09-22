@@ -25,9 +25,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        Response::macro('success',function($data){
+        Response::macro('success',function($data,$message='success'){
             return response()->json([
                 'success' => true,
+                'message' => $message,
                 'data' => $data
             ]);
         });
@@ -35,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Response::macro('error',function($error,$status_code,$error_data=[]){
             return response()->json([
                 'success' => false,
-                'error' => $error,
+                'message' => $error,
                 'errors' => $error_data,
             ],$status_code);
         });

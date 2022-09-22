@@ -23,8 +23,9 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum','isapproved'])->only('deauthenticate','updateStatus','updateUser','show','listOrganisationUsers');
-    }
+        $this->middleware(['auth:sanctum'])->only('profile','deauthenticate','updateStatus','updateUser','show','listOrganisationUsers');
+        $this->middleware('isapproved')->only('updateStatus','updateUser','show','listOrganisationUsers');
+    }   
 
     public function startEmailSignup(Request $request)
     {
@@ -62,10 +63,10 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'name' => 'required',
             'code' => 'required',
-            'password' => 'required|min:6',
+            'password' => 'required|min:6|confirmed',
             'organisation' => 'required|exists:organisations,id',
-            'role' => 'array',
-            'role.*' => 'required|in:Subscriber,Manager,Contributor'
+            //'role' => 'array|required',
+            'role' => 'required|in:Subscriber,Manager,Contributor'
         ]);
 
         if ($validator->fails()) {
@@ -89,7 +90,7 @@ class UserController extends Controller
 
         $proposed_organisation = Organisation::find($request->organisation);
 
-        $aims_user->attachRoles($request->role,$proposed_organisation);
+        $aims_user->attachRoles([$request->role],$proposed_organisation);
 
         $organisation_users = $proposed_organisation->users;
         
@@ -99,7 +100,7 @@ class UserController extends Controller
             $aims_user->save();
         }
 
-        if($organisation_users->count() > 1) {
+        if ($organisation_users->count() > 1) {
             // email users in the organisation1=
             $users_except_applicant = $organisation_users->where('id','!=',$aims_user->id);
             Log::debug(['organisation_users' => $users_except_applicant]);
@@ -126,12 +127,12 @@ class UserController extends Controller
     public function authenticate(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'email' => 'required|string',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->messages()->toArray(),422);
+            return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
         $user = User::where('email', $request->email)->first();
@@ -147,15 +148,22 @@ class UserController extends Controller
         $accessToken = $user->createToken($user->name)->plainTextToken;
 
         $user_info = [
-            'token' => $accessToken
+            'token' => $accessToken,
+            //'user' => new UserResource($user)
         ];
 
         return response()->success($user_info);
     }
 
-    public function deauthenticate($tokenId)
+    public function profile(Request $request)
     {
-        auth()->user()->tokens()->where('id',$tokenId)->delete();
+        $user = $request->user();
+        return response()->success(new UserResource($user));
+    }
+
+    public function deauthenticate()
+    {
+        auth()->user()->tokens()->delete();
 
         return response()->success(['message' => __('messages.success_logout')]);
     }
@@ -173,7 +181,7 @@ class UserController extends Controller
 
         if ($validator->fails()) {
 			
-			return response()->error(__('messages.invalid_request'),422,$validator->messages()->toArray());
+			return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
         $aims_user = User::find($id);

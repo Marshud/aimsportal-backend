@@ -65,8 +65,8 @@ class DefaultPermissions extends Seeder
         $subscriber = Role::firstOrCreate(['name'=>'Subscriber','display_name'=>'Subscriber']);
         $contributor = Role::firstOrCreate(['name'=>'Contributor','display_name'=>'Contributor']);
         $manager = Role::firstOrCreate(['name'=>'Manager','display_name'=>'Manager']);
-        $manager->attachPermissions([$view_users, $approve_users, $create_projects, $view_projects, $update_projects, $delete_projects]);
-        $contributor->attachPermissions([$view_users, $approve_users, $create_projects, $view_projects, $update_projects]);
+        $manager->syncPermissions([$view_users, $approve_users, $create_projects, $view_projects, $update_projects, $delete_projects]);
+        $contributor->syncPermissions([$view_users, $approve_users, $create_projects, $view_projects, $update_projects]);
 
         //assign first user role of super admin 
         
