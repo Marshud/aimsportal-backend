@@ -28,4 +28,19 @@ jobs:
       #   run: .scripts/deploy.sh
       - name: Run composer updates
         run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Clear old cache
+        run: php artisan clear-compiled
+
+      - name: Recreate cache by Optimizing
+        run: php artisan optimize
+
+      - name: Run DB Migrations
+        run: php artisan migrate --force
+
+      - name: Seed the database
+        run: php artisan db:seed
+      
+      
+      
  
