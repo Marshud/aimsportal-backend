@@ -24,6 +24,6 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
           EXCLUDE: ".git, .github, composer"
       
-      - name: Update server requirements
-        run: .scripts/deploy.sh
+      # - name: Update server requirements
+      #   run: .scripts/deploy.sh
  
