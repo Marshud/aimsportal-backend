@@ -28,4 +28,4 @@ php artisan db:seed
 # Exit maintenance mode
 php artisan up
 
-echo "Deployment finished!"
+echo "Deployment finished!" 
