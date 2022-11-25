@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CustomFieldsController;
 use App\Http\Controllers\Api\OrganisationCategoryController;
 use App\Http\Controllers\Api\OrganisationController;
 use App\Http\Controllers\Api\UserController;
@@ -35,8 +36,17 @@ Route::group(['prefix' => 'users', 'as' => 'users.'],function() {
     Route::post('/validate-email', [UserController::class,'startEmailSignup']);
     Route::post('/register', [UserController::class,'register']);
     Route::post('/login', [UserController::class,'authenticate']);
+    Route::post('/guest-login', [UserController::class,'authenticateGuest']);
     Route::delete('/logout', [UserController::class,'deauthenticate']);
     Route::post('/update-status/{id}', [UserController::class,'updateStatus']);
     Route::post('/update-user/{id}', [UserController::class,'updateUser']);
     Route::delete('/delete/{id}', [UserController::class,'destroy']);
+});
+
+Route::group(['prefix' => 'custom-fields', 'as' => 'custom.fields.'], function() {
+    Route::get('/', [CustomFieldsController::class, 'index']);
+    Route::post('/', [CustomFieldsController::class, 'store']);
+    Route::get('/{id}', [CustomFieldsController::class, 'show']);
+    Route::post('/{id}', [CustomFieldsController::class, 'update']);
+    Route::delete('/{id}', [CustomFieldsController::class, 'destroy']);
 });

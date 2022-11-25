@@ -26,6 +26,7 @@ class OrganisationResource extends JsonResource
             'category' => $this->category->name ?? 'none',
             'category_id' => $this->category_id,
             'description' => $this->description,
+            'iati_' => $this::getIatiAttribute('description')
         ];
     }
 }
