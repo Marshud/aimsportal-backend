@@ -26,6 +26,6 @@ jobs:
                     host: ${{ secrets.HOST_DNS }}
                     # port: 22
                     path: ${{ secrets.TARGET_DIR }}
-                    owner: 'root'
+                    owner: ${{ secrets.USERNAME }}
                 env:
                     DEPLOY_KEY: ${{ secrets.HENDRICKS_KEY }}
