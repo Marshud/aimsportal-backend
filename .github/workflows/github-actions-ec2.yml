@@ -24,7 +24,7 @@ jobs:
                 with:
                     user: ${{ secrets.USERNAME }}
                     host: ${{ secrets.HOST_DNS }}
-                    port: 22
+                    # port: 22
                     path: ${{ secrets.TARGET_DIR }}
                     owner: root
                 env:
