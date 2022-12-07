@@ -1,46 +1,31 @@
-name: Push-to-Hendricks
-
-# Trigger deployment only on push to master branch
+name: Build and Deploy
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            -   master
 
 jobs:
-  deploy:
-    name: Deploy to EC2 on master branch push
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout the files
-        uses: actions/checkout@v2
-
-      - name: Deploy to Hendricks
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.HENDRICKS_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-          EXCLUDE: ".git, .github, composer"
-      
-      # - name: Update server requirements
-      #   run: .scripts/deploy.sh
-      - name: Run composer updates
-        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Clear old cache
-        run: php artisan clear-compiled
-
-      - name: Recreate cache by Optimizing
-        run: php artisan optimize
-
-      # - name: Run DB Migrations
-      #   run: php artisan migrate --force
-
-      # - name: Seed the database
-      #   run: php artisan db:seed
-      
-
-      
- 
+    build:
+        name: Build and Deploy
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout Repository
+                uses: actions/checkout@master
+            -   name: Setup Enviroment
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '7.4'
+            -   name: Speed up the packages installation process
+                run: composer global require hirak/prestissimo
+            -   name: Install Packages
+                run: composer install --no-dev
+            -   name: Deploy to Server
+                uses: ngocquyhoang/deploy@laravel
+                with:
+                    user: ${{ secrets.USERNAME }}
+                    host: ${{ secrets.HOST_DNS }}
+                    port: 22
+                    path: ${{ secrets.TARGET_DIR }}
+                    owner: root
+                env:
+                    DEPLOY_KEY: ${{ secrets.HENDRICKS_KEY }}
