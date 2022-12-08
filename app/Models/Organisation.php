@@ -46,4 +46,14 @@ class Organisation extends LaratrustTeam implements Auditable
         }
         return false;
     }
+
+    public function narratives()
+    {
+        return $this->morphMany(ProjectNarrative::class, 'element');
+    }
+
+    public function iati_type()
+    {
+       return iati_get_code_value('OrganisationType', $this->type);
+    }
 }

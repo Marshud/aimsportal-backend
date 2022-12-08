@@ -17,4 +17,6 @@ class CustomField extends Model implements Auditable
     {
         return $this->hasMany(CustomFieldOption::class, 'custom_field_id');
     }
+
+    protected $appends = ['audits'];
 }

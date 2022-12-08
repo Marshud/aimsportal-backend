@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('organisations', function (Blueprint $table) {
-            if (Schema::hasColumn('organisations', 'iati_org_id')) {
+            if (!Schema::hasColumn('organisations', 'iati_org_id')) {
                 $table->string('iati_org_id')->nullable();
+                $table->string('iati_org_type')->nullable();
             }
         });
     }

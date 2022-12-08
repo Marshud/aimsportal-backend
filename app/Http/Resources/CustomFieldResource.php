@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\CoreRoles;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CustomFieldResource extends JsonResource
@@ -19,7 +20,17 @@ class CustomFieldResource extends JsonResource
             'name' => $this->name,
             'field_type' => $this->field_type,
             'required' => $this->required,
-            'options' => $this->options
+            'options' => $this->options,
+            'audits' => ($this->canSeeAudits()) ? $this->audits : '',
         ];
+    }
+
+    private function canSeeAudits(): bool
+    {
+        if (auth('sanctum')->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
+            return true;
+        }
+
+        return false;
     }
 }

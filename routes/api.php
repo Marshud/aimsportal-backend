@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CustomFieldsController;
 use App\Http\Controllers\Api\OrganisationCategoryController;
 use App\Http\Controllers\Api\OrganisationController;
+use App\Http\Controllers\Api\ProjectsController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,4 +50,8 @@ Route::group(['prefix' => 'custom-fields', 'as' => 'custom.fields.'], function()
     Route::get('/{id}', [CustomFieldsController::class, 'show']);
     Route::post('/{id}', [CustomFieldsController::class, 'update']);
     Route::delete('/{id}', [CustomFieldsController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'projects', 'as' => 'projects.'], function() {
+    Route::get('/', [ProjectsController::class, 'index']);
 });
