@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('project_other_identifier', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignUuid('project_id')->constrained('projects')->onDelete('cascade');
             $table->foreignId('organisation_id')->nullable();
             $table->string('iati_xml_id')->default('iati-activities/iati-activity/other-identifier');
             $table->string('ref');

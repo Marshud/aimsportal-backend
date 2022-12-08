@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('projects', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('title');
             $table->string('iati_identifier')->nullable();
             $table->foreignId('organisation_id')->nullable()->constrained('organisations'); //reporting organisation

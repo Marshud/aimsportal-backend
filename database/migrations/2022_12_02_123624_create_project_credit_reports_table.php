@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('project_credit_reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('cascade');
+            $table->foreignUuid('project_id')->nullable()->constrained('projects')->onDelete('cascade');
             $table->string('iati_xml_id')->default('iati-activities/iati-activity/crs-add');
             $table->boolean('attached')->default(false);
             $table->timestamps();

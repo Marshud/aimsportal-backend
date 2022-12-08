@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('project_forward_spending_surveys', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('cascade');
+            $table->foreignUuid('project_id')->nullable()->constrained('projects')->onDelete('cascade');
             $table->string('iati_xml_id')->default('iati-activities/iati-activity/fss');
             $table->boolean('priority')->default(false);
             $table->date('extraction_date');

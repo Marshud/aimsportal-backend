@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('project_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignUuid('project_id')->constrained('projects')->onDelete('cascade');
             $table->string('iati_xml_id')->default('iati-activities/iati-activity/planned-disbursement');
             $table->string('ref')->nullable();
             $table->boolean('humanitarian')->default(false);
@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('value_currency');
             $table->date('value_date');
             $table->double('value_amount');
-            $table->string('disbursement_channel_code');
-            $table->string('recipient_country_code');
+            $table->string('disbursement_channel_code')->nullable();
+            $table->string('recipient_country_code')->nullable();
             $table->string('recipient_region_code')->nullable();
             $table->string('recipient_region_vocabulary')->nullable();
             $table->string('flow_type_code')->nullable();

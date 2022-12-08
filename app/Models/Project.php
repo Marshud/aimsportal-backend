@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use App\Traits\HasMeta;
 use App\Traits\HasOrganisation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    use HasFactory, HasMeta;
+    use HasUuids, HasFactory, HasMeta;
 
     protected $guarded =[];
 

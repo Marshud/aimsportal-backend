@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('project_policy_markers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignUuid('project_id')->constrained('projects')->onDelete('cascade');
             $table->string('iati_xml_id')->default('iati-activities/iati-activity/policy-marker');
             $table->string('vocabulary');
             $table->string('vocabulary_uri')->nullable();

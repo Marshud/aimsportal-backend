@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('project_locations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignUuid('project_id')->constrained('projects')->onDelete('cascade');
             $table->string('iati_xml_id')->default('iati-activities/iati-activity/location');
             $table->string('ref');//reference to locations in system
             $table->longText('location_details')->nullable(); //stores whole xml children of locations
