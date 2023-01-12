@@ -18,7 +18,7 @@ class ProjectResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'default_title' => $this->title,
             'iati_identifier' => $this->iati_identifier,
             'iati_activity_status' => $this->activity_status,
             'iati_activity_scope' => $this->activity_scope,
@@ -29,6 +29,7 @@ class ProjectResource extends JsonResource
             'iati_default_tied_status' => $this->default_tied_status,
             'iati_capital_spend_percentage' => $this->capital_spend_percentage,
             'iati_conditions_attached' => $this->conditions_attached,
+            'title' => ProjectNarrativeResource::collection($this->title_translations),
             'reporting_org' => new OrganisationResource($this->reporting_organisation),
             'humanitarian_scope' => ProjectHumanitarianScopeResource::collection($this->humanitarian_scopes),
             'participating_org' => ProjectParticipatingOrgResource::collection($this->participating_organisations),

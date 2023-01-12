@@ -16,11 +16,9 @@ return new class extends Migration
         Schema::create('project_activity_dates', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('project_id')->constrained('projects')->onDelete('cascade');
-            $table->string('iati_xml_id')->default('iati-activities/iati-activity/activity-date');
-            $table->string('narrative')->nullable();
+            $table->string('iati_xml_id')->default('iati-activities/iati-activity/activity-date');            
             $table->string('type');
             $table->string('iso_date');
-            $table->string('lang')->default('en');
             $table->timestamps();
         });
     }

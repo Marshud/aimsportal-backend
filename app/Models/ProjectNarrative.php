@@ -9,6 +9,8 @@ class ProjectNarrative extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function element()
     {
         return $this->morphTo();

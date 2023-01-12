@@ -14,6 +14,11 @@ class Project extends Model
 
     protected $guarded =[];
 
+    public function title_translations()
+    {
+        return $this->morphMany(ProjectNarrative::class, 'element');
+    }
+
     public function condition()
     {
         return $this->hasOne(ProjectCondition::class, 'project_id');
