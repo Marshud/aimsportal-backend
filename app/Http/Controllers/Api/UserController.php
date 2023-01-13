@@ -155,6 +155,37 @@ class UserController extends Controller
         return response()->success($user_info);
     }
 
+    public function authenticateGuest(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'email' => 'nullable|email',
+            'password' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
+        }
+
+        $user = User::where('email', 'guest@admin.com')->first();
+
+        if (!$user) {
+
+            throw ValidationException::withMessages([
+                'email' => [__('auth.failed')],
+            ]);
+            
+        }
+
+        $accessToken = $user->createToken($user->name)->plainTextToken;
+
+        $user_info = [
+            'token' => $accessToken,
+            //'user' => new UserResource($user)
+        ];
+
+        return response()->success($user_info);
+    }
+
     public function profile(Request $request)
     {
         $user = $request->user();

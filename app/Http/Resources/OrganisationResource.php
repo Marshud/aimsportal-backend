@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\CoreRoles;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrganisationResource extends JsonResource
@@ -26,6 +27,27 @@ class OrganisationResource extends JsonResource
             'category' => $this->category->name ?? 'none',
             'category_id' => $this->category_id,
             'description' => $this->description,
+            'iati_identifier' => $this->iati_org_id,
+            'iati_type' => $this->iati_org_type,
+            'type' => $this->iati_type()->name ?? null,
+            'audits' => ($this->canSeeAudits()) ? $this->audits : '',
         ];
+    }
+
+    private function canSeeAudits(): bool
+    {
+        if (false === auth('sanctum')->check()) {
+            return false;
+        }
+
+        if (auth('sanctum')->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
+            return true;
+        }
+
+        if (auth('sanctum')->user()->hasRole(CoreRoles::Manager->value)) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -107,6 +107,7 @@ class OrganisationController extends Controller
         $organisation->address = $request->address;
         $organisation->approved = $request->approved;
         $organisation->description = $request->description ?? null;
+        $organisation->iati_org_id = $request->iati_org_id ?? null;
         $organisation->save();
 
         return response()->success(new OrganisationResource($organisation));
