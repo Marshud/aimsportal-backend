@@ -2241,6 +2241,7 @@
                 "source": "https://github.com/owen-it/laravel-auditing"
             },
             "time": "2022-07-29T11:21:26+00:00"
+
         },
         {
             "name": "phpoption/phpoption",
@@ -4643,6 +4644,7 @@
             ],
             "support": {
                 "source": "https://github.com/symfony/polyfill-uuid/tree/v1.27.0"
+
             },
             "funding": [
                 {
@@ -8044,8 +8046,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.0.2"
+        "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
