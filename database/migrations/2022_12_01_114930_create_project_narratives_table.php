@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('project_narratives', function (Blueprint $table) {
             $table->id();
             $table->string('element_type');
-            $table->unsignedBigInteger('element_id');
+            $table->uuid('element_id');
             $table->text('narrative');
             $table->string('lang')->default('en');
             $table->timestamps();
