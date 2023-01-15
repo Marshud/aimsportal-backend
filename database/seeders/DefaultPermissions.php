@@ -58,6 +58,16 @@ class DefaultPermissions extends Seeder
                         ['display_name' => 'Update Projects', 'description' => 'Ability to update projects']);
         $delete_projects = Permission::firstOrCreate(['name'=>'delete-projects'],
                         ['display_name' => 'Delete Projects', 'description' => 'Ability to delete projects from system']);
+
+
+        Permission::firstOrCreate(['name'=>'create-custom-fields'],
+                        ['display_name' => 'Create Custom Fields', 'description' => 'Ability to create custom fields']);
+        Permission::firstOrCreate(['name'=>'view-custom-fields'],
+                        ['display_name' => 'View Custom Fields', 'description' => 'Ability to view custom fields']);
+        Permission::firstOrCreate(['name'=>'update-custom-fields'],
+                        ['display_name' => 'Update Custom Fields', 'description' => 'Ability to update custom fields']);
+        Permission::firstOrCreate(['name'=>'delete-custom-fields'],
+                        ['display_name' => 'Delete Projects', 'description' => 'Ability to delete projects custom fields system']);                
         //create admin role 
         $super_administrator = Role::firstOrCreate(['name'=>'Super Administrator','display_name'=>'Super Administrator']);
         $super_administrator->syncPermissions(Permission::where('name', 'NOT LIKE', '%blahblah%')->get());
@@ -74,6 +84,8 @@ class DefaultPermissions extends Seeder
         
         $admin_user = User::firstOrCreate(['email'=>'admin@admin.com'],['name'=>'Super Administrator','password'=>Hash::make('12345678'), 'status' => UserStatus::Approved]);
         $admin_user->attachRole($super_administrator);
+
+        $guest_user = User::firstOrCreate(['email' => 'guest@admin.com'], ['name' => 'Guest User', 'password' => Hash::make('GPassword1'), 'status' => UserStatus::Approved]);
         
         
     }
