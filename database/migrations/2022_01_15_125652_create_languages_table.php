@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('codelists', function (Blueprint $table) {
+        Schema::create('languages', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('version')->default('2.0.3');
-            $table->text('description')->nullable();
-            $table->boolean('is_namespaced')->default(false);
-            $table->string('slug_name')->nullable()->unique();
+            $table->string('code')->unique();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('codelists');
+        Schema::dropIfExists('languages');
     }
 };

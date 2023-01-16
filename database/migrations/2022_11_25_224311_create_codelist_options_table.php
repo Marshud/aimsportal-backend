@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('codelist_options', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('codelist_id')->constrained('codelists')->onDelete('cascade');
-            $table->string('name');
+            $table->foreignId('codelist_id')->constrained('codelists')->onDelete('cascade');            
             $table->string('code');
-            $table->string('description')->nullable();
-            $table->string('lang')->default('en');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('related_codelist')->nullable();
             $table->timestamps();
-            $table->unique(['codelist_id', 'code', 'lang']);
+            $table->unique(['codelist_id', 'code']);
         });
     }
 

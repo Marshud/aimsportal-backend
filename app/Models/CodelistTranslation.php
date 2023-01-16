@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CodelistOption extends Model
+class CodelistTranslation extends Model
 {
     use HasFactory;
 
-    public function translations()
+    public function codelist_option()
     {
-        return $this->hasMany(CodelistTranslation::class, 'codelist_option_id');
+        return $this->belongsTo(CodelistOption::class, 'codelist_option_id');
     }
 }

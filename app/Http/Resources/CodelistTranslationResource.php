@@ -4,8 +4,15 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class CodelistTranslationResource extends JsonResource
 {
+
+    /**
+     * The "data" wrapper that should be applied.
+     *
+     * @var string|null
+     */
+   // public static $wrap = 'user';
     /**
      * Transform the resource into an array.
      *
@@ -16,13 +23,9 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'code' => $this->codelist_option->code,
             'name' => $this->name,
-            'status' => $this->status,
-            'email' => $this->email,
-            'language' => $this->language,
-            'organisation' => ($this->current_organisation_id) ? new OrganisationResource($this->currentOrganisation) : null,
-            'roles' => RolesResource::collection($this->roles)
-
+            'description' => $this->description
         ];
     }
 }
