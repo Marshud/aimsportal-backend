@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CustomFieldsController;
+use App\Http\Controllers\Api\IatiHelperController;
 use App\Http\Controllers\Api\OrganisationCategoryController;
 use App\Http\Controllers\Api\OrganisationController;
 use App\Http\Controllers\Api\ProjectsController;
@@ -57,4 +58,11 @@ Route::group(['prefix' => 'projects', 'as' => 'projects.'], function() {
     Route::post('/', [ProjectsController::class, 'store']);
     Route::put('/{id}', [ProjectsController::class, 'update']);
     Route::get('/{id}', [ProjectsController::class, 'show']);
+});
+
+Route::group(['prefix' => 'general', 'as' => 'general.'], function() {
+    Route::group(['prefix' => 'codelists', 'as' => 'codelists.'], function() {
+        Route::any('get-options', [IatiHelperController::class, 'getCodelistOptions']);
+        Route::any('get-value', [IatiHelperController::class, 'getCodelistValue']);
+    });
 });
