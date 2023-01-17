@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('codelist_option_id')->constrained('codelist_options')->onDelete('cascade');
             $table->string('lang');
-            $table->string('name');
-            $table->string('description')->nullable();
+            $table->text('name');
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->unique(['codelist_option_id', 'lang']);
         });

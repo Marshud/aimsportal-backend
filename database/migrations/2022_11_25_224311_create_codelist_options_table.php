@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('codelist_id')->constrained('codelists')->onDelete('cascade');            
             $table->string('code');
-            $table->string('name');
+            $table->text('name');
             $table->text('description')->nullable();
             $table->string('related_codelist')->nullable();
             $table->timestamps();

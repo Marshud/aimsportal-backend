@@ -9,6 +9,8 @@ class CodelistTranslation extends Model
 {
     use HasFactory;
 
+    protected $guarded =[];
+
     public function codelist_option()
     {
         return $this->belongsTo(CodelistOption::class, 'codelist_option_id');

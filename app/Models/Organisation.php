@@ -10,7 +10,7 @@ class Organisation extends LaratrustTeam implements Auditable
 {
     use UsesIatiStandard;
     use \OwenIt\Auditing\Auditable;
-    public $guarded = [];
+    protected $guarded = [];
 
     // const IATI_DEFINITION = [
     //     'enabled' => true,
