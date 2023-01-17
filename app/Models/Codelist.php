@@ -9,6 +9,8 @@ class Codelist extends Model
 {
     use HasFactory;
 
+    protected $guarded =[];
+
     public function options()
     {
         return $this->hasMany(CodelistOption::class, 'codelist_id');
