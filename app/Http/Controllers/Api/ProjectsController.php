@@ -35,6 +35,7 @@ class ProjectsController extends Controller
             'sectors' => 'array',
             'budgets' => 'array|required',
             'participating_organisations' => 'array|required',
+            'recipient_countries' => 'array|required',
             'project_objective' => 'required|max:255',
             'project_planned_start_date' => 'date|required',
             'project_planned_end_date' => 'required|date',
@@ -165,18 +166,30 @@ class ProjectsController extends Controller
                     
                 }
 
-                $recipient_country = $project->recipient_countries()->create([
-                    'code' => $request->recipient_country ?? 'SS',
-                    'percentage' => 100
-                ]);
+                $recipient_countries = $request->recipient_countries;
 
-                if ($request->recipient_country_narrative) 
-                {
-                    $recipient_country->narratives()->create([
-                        'narrative' => $request->recipient_country_narrative,
-                        'lang' => $request->user()->language ?? 'en',
+                foreach($recipient_countries as $country) {
+
+                    $recipient_country = $project->recipient_countries()->create([
+                        'code' => $country['country_code'] ?? 'SS',
+                        'percentage' => $country['country_percentage'] ?? 100
                     ]);
+
+                    if (!empty($country['narratives'])) 
+                    {
+                        $country_narratives = $country['narratives'];
+
+                        foreach($country_narratives as $narrative) {
+                            $recipient_country->narratives()->create([
+                                'narrative' => $narrative,
+                                'lang' => $narrative['lang'] ?? $request->user()->language ?? 'en',
+                            ]);
+                        }
+                        
+                    }
                 }
+
+                
 
                 foreach ($regions as $region) {
                     $recipient_region = $project->recipient_regions()->create([
