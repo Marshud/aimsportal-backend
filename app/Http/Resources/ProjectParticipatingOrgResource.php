@@ -17,6 +17,7 @@ class ProjectParticipatingOrgResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'organisation_id' => $this->organisation_id,
             'iati_ref' => $this->organisation->iati_org_id ?? null,
             'iati_type' => $this->type,
             'iati_role' => $this->role,

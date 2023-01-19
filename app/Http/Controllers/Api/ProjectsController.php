@@ -9,7 +9,11 @@ use App\Http\Resources\ProjectResource;
 use App\Models\Organisation;
 use App\Models\OrganisationCategory;
 use App\Models\Project;
+use App\Models\ProjectBudget;
 use App\Models\ProjectHumanitarianScope;
+use App\Models\ProjectParticipatingOrg;
+use App\Models\ProjectRecipientRegion;
+use App\Models\ProjectSector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +36,7 @@ class ProjectsController extends Controller
         
         $validator = Validator::make($request->all(),[
             'project_title' => 'required|max:255',
-            'sectors' => 'array',
+            'sectors' => 'array|required',
             'budgets' => 'array|required',
             'participating_organisations' => 'array|required',
             'recipient_countries' => 'array|required',
@@ -112,7 +116,7 @@ class ProjectsController extends Controller
                 ]);
 
                 $project_planned_end_date = $project->activity_dates()->create([
-                    'type' => 1,
+                    'type' => 3,
                     'iso_date' => $request->project_planned_end_date
                 ]);
                 
@@ -124,7 +128,7 @@ class ProjectsController extends Controller
                 if ($request->project_actual_start_date)
                 {
                     $project_actual_start_date = $project->activity_dates()->create([
-                        'type' => 1,
+                        'type' => 2,
                         'iso_date' => $request->project_actual_start_date
                     ]);
                     
@@ -137,7 +141,7 @@ class ProjectsController extends Controller
                 if ($request->project_actual_end_date)
                 {
                     $project_actual_end_date = $project->activity_dates()->create([
-                        'type' => 1,
+                        'type' => 4,
                         'iso_date' => $request->project_actual_end_date
                     ]);
                     
@@ -252,12 +256,13 @@ class ProjectsController extends Controller
         {
             return response()->error('Unauthorized', 403); 
         }
-        
+
         $validator = Validator::make($request->all(),[
             'project_title' => 'required|max:255',
-            'sectors' => 'array',
+            'sectors' => 'array|required',
             'budgets' => 'array|required',
             'participating_organisations' => 'array|required',
+            'recipient_countries' => 'array|required',
             'project_objective' => 'required|max:255',
             'project_planned_start_date' => 'date|required',
             'project_planned_end_date' => 'required|date',
@@ -265,7 +270,7 @@ class ProjectsController extends Controller
             'project_actual_end_date' => 'nullable|date',
             'organisation_id' => 'required|exists:organisations,id',
             'activity_scope' => 'nullable|numeric',
-            'activity_status' => 'required|numeric',
+            'activity_status' => 'required|numeric'
             //'is_iati_project' => 'boolean',
 
         ]);
@@ -335,7 +340,7 @@ class ProjectsController extends Controller
                 ]);
 
                 $project_planned_end_date = $project->activity_dates()->updateOrCreate([
-                    'type' => 1,
+                    'type' => 3,
                     'iso_date' => $request->project_planned_end_date
                 ]);
                 
@@ -347,7 +352,7 @@ class ProjectsController extends Controller
                 if ($request->project_actual_start_date)
                 {
                     $project_actual_start_date = $project->activity_dates()->updateOrCreate([
-                        'type' => 1,
+                        'type' => 2,
                         'iso_date' => $request->project_actual_start_date
                     ]);
                     
@@ -360,7 +365,7 @@ class ProjectsController extends Controller
                 if ($request->project_actual_end_date)
                 {
                     $project_actual_end_date = $project->activity_dates()->updateOrCreate([
-                        'type' => 1,
+                        'type' => 4,
                         'iso_date' => $request->project_actual_end_date
                     ]);
                     
@@ -389,17 +394,29 @@ class ProjectsController extends Controller
                     
                 }
 
-                $recipient_country = $project->recipient_countries()->updateOrCreate([
-                    'code' => $request->recipient_country ?? 'SS',
-                    'percentage' => 100
-                ]);
+               
 
-                if ($request->recipient_country_narrative) 
-                {
-                    $recipient_country->narratives()->updateOrCreate([
-                        'narrative' => $request->recipient_country_narrative,
-                        'lang' => $request->user()->language ?? 'en',
+                $recipient_countries = $request->recipient_countries;
+
+                foreach($recipient_countries as $country) {
+
+                    $recipient_country = $project->recipient_countries()->updateOrCreate([
+                        'code' => $country['country_code'] ?? 'SS',
+                        'percentage' => $country['country_percentage'] ?? 100
                     ]);
+
+                    if (!empty($country['narratives'])) 
+                    {
+                        $country_narratives = $country['narratives'];
+
+                        foreach($country_narratives as $narrative) {
+                            $recipient_country->narratives()->updateOrCreate([
+                                'narrative' => $narrative,
+                                'lang' => $narrative['lang'] ?? $request->user()->language ?? 'en',
+                            ]);
+                        }
+                        
+                    }
                 }
 
                 foreach ($regions as $region) {
@@ -472,7 +489,7 @@ class ProjectsController extends Controller
     public function index(Request $request)
     {
        // $project = Project::first();
-        return response()->success(ProjectResource::collection(Project::all()));
+        return response()->success(ProjectResource::collection(Project::paginate(20)));
     }
 
     public function destroy(Request $request, $id)
@@ -492,6 +509,78 @@ class ProjectsController extends Controller
         }
 
         $category->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteParticipatingOrg(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $participating_org = ProjectParticipatingOrg::find($id);
+        if (!$participating_org)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $participating_org->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteProjectBudget(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $project_budget = ProjectBudget::find($id);
+        if (!$project_budget)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $project_budget->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteProjectSector(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $project_sector = ProjectSector::find($id);
+        if (!$project_sector)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $project_sector->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteRecipientRegion(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $project_recipient_region = ProjectRecipientRegion::find($id);
+        if (!$project_recipient_region)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $project_recipient_region->delete();
 
         return response()->success(__('messages.success_deleted'));
     }
