@@ -58,6 +58,11 @@ Route::group(['prefix' => 'projects', 'as' => 'projects.'], function() {
     Route::post('/', [ProjectsController::class, 'store']);
     Route::put('/{id}', [ProjectsController::class, 'update']);
     Route::get('/{id}', [ProjectsController::class, 'show']);
+    Route::delete('/{id}', [ProjectsController::class, 'destroy']);
+    Route::delete('/participating-org/{id}', [ProjectsController::class, 'deleteParticipatingOrg']);
+    Route::delete('/budget/{id}', [ProjectsController::class, 'deleteProjectBudget']);
+    Route::delete('/sector/{id}', [ProjectsController::class, 'deleteProjectSector']);
+    Route::delete('/recipient-region/{id}', [ProjectsController::class, 'deleteRecipientRegion']);
 });
 
 Route::group(['prefix' => 'general', 'as' => 'general.'], function() {
