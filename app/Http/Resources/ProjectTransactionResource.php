@@ -30,7 +30,6 @@ class ProjectTransactionResource extends JsonResource
             'iati_flow_type_code' => $this->flow_type_code,
             'iati_finance_type_code' => $this->finance_type_code,
             'iati_tied_status_code' => $this->tied_status_code,
-            'iati_description_narrative' => $this->description->narrative,
             'sectors' => ProjectTransactionSectorResource::collection($this->sectors),
             'provider_org' => new ProjectTransactionProviderOrgResource($this->provider_org),
             'receiver_org' => new ProjectTransactionReceiverOrgResource($this->receiver_org),

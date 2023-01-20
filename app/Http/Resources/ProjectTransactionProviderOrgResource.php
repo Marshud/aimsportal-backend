@@ -16,6 +16,7 @@ class ProjectTransactionProviderOrgResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'organisation_id' => $this->organisation_id,
             'iati_type' => $this->type,
             'iati_ref' => $this->ref,
             'iati_provider_activity_id' => $this->provider_activity_id,
