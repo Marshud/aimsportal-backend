@@ -11,6 +11,13 @@ class ProjectTransactionProviderOrg extends Model
 
     protected $table = 'project_transaction_provider_org';
 
+    protected $guarded = [];
+
+    public function organisation()
+    {
+        return $this->belongsTo(Organisation::class, 'organisation_id');
+    }
+
     public function transaction()
     {
         return $this->belongsTo(ProjectTransaction::class, 'project_transaction_id');
