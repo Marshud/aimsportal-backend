@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
+use Whoops\Run;
 
 class UserController extends Controller
 {
@@ -25,6 +26,7 @@ class UserController extends Controller
     {
         $this->middleware(['auth:sanctum'])->only('profile','deauthenticate','updateStatus','updateUser','show','listOrganisationUsers');
         $this->middleware('isapproved')->only('updateStatus','updateUser','show','listOrganisationUsers');
+        $this->middleware('verified.app')->only('authenticateGuest');
     }   
 
     public function startEmailSignup(Request $request)
@@ -157,22 +159,19 @@ class UserController extends Controller
 
     public function authenticateGuest(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'email' => 'nullable|email',
-            'password' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
-        }
-
-        $user = User::where('email', 'guest@admin.com')->first();
+        
+        $guestUsername = env('GUEST_USERNAME');
+        $guestPassword = env('GUEST_PASSWORD');
+        $user = User::where('email', $guestUsername)->first();
 
         if (!$user) {
 
-            throw ValidationException::withMessages([
-                'email' => [__('auth.failed')],
-            ]);
+            return response()->error('Unauthorized', 403);
+            
+        }
+        if (!$user || !Hash::check($guestPassword, $user->password)) {
+
+            return response()->error('Unauthorized', 403);
             
         }
 
@@ -180,7 +179,6 @@ class UserController extends Controller
 
         $user_info = [
             'token' => $accessToken,
-            //'user' => new UserResource($user)
         ];
 
         return response()->success($user_info);
@@ -192,9 +190,9 @@ class UserController extends Controller
         return response()->success(new UserResource($user));
     }
 
-    public function deauthenticate()
+    public function deauthenticate(Request $request)
     {
-        auth()->user()->tokens()->delete();
+        $request->user()->currentAccessToken()->delete();
 
         return response()->success(['message' => __('messages.success_logout')]);
     }
@@ -235,15 +233,16 @@ class UserController extends Controller
 
     public function updateUser(Request $request, $id)
     {
-        if (!$request->user()->isAbleTo('update-users'))
+        if (!$request->user()->isAbleTo('approve-users'))
         {
             return response()->error('Unauthorized',403); 
         }
 
         $validator = Validator::make($request->all(),[
             'name' => 'required',
-            'organisation' => 'required|exists:organisations,id',
-            'role' => 'required|in:Subscriber,Manager,Contributor'
+            'organisation' => 'nullable|exists:organisations,id',
+            'role' => ["required", Rule::in(['Subscriber','Manager','Contributor', 'Super Administrator'])],
+            'language' => 'required|exists:languages,code'
         ]);
 
         if ($validator->fails()) {
@@ -258,12 +257,13 @@ class UserController extends Controller
         }
 
         $aims_user->name = $request->name;
-        $aims_user->current_organisation_id = $request->organisation;
+        $aims_user->current_organisation_id = ($request->organisation) ? $request->organisation : null;
+        $aims_user->language = $request->language;
         $aims_user->save();
 
         $organisation = Organisation::find($request->organisation);
 
-        $aims_user->syncRoles($request->role,$organisation); 
+        $aims_user->syncRoles([$request->role],$organisation); 
 
         return response()->success(new UserResource($aims_user));
     }

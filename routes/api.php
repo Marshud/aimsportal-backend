@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\CustomFieldsController;
+use App\Http\Controllers\Api\IatiHelperController;
+use App\Http\Controllers\Api\LanguagesController;
 use App\Http\Controllers\Api\OrganisationCategoryController;
 use App\Http\Controllers\Api\OrganisationController;
 use App\Http\Controllers\Api\ProjectsController;
@@ -57,4 +59,21 @@ Route::group(['prefix' => 'projects', 'as' => 'projects.'], function() {
     Route::post('/', [ProjectsController::class, 'store']);
     Route::put('/{id}', [ProjectsController::class, 'update']);
     Route::get('/{id}', [ProjectsController::class, 'show']);
+    Route::delete('/{id}', [ProjectsController::class, 'destroy']);
+    Route::delete('/participating-org/{id}', [ProjectsController::class, 'deleteParticipatingOrg']);
+    Route::delete('/budget/{id}', [ProjectsController::class, 'deleteProjectBudget']);
+    Route::delete('/sector/{id}', [ProjectsController::class, 'deleteProjectSector']);
+    Route::delete('/recipient-region/{id}', [ProjectsController::class, 'deleteRecipientRegion']);
+});
+
+Route::group(['prefix' => 'general', 'as' => 'general.'], function() {
+    Route::group(['prefix' => 'codelists', 'as' => 'codelists.'], function() {
+        Route::any('get-options', [IatiHelperController::class, 'getCodelistOptions']);
+        Route::any('get-value', [IatiHelperController::class, 'getCodelistValue']);
+    });
+    Route::group(['prefix' => 'languages', 'as' => 'languagegs.'], function() {
+        Route::any('/', [LanguagesController::class, 'index']);
+        Route::any('get-translations', [LanguagesController::class, 'appTranslations']);
+    });
+    
 });

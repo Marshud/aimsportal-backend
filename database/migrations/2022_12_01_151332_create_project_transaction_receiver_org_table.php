@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('project_transaction_receiver_org', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('organisation_id')->nullable();
             $table->foreignId('project_transaction_id')->constrained('project_transactions')->onDelete('cascade');
-            $table->string('ref');
-            $table->string('receiver_activity_id');
-            $table->string('type');
+            $table->string('ref')->nullable();
+            $table->string('receiver_activity_id')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

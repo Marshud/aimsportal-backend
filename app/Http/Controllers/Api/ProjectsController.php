@@ -9,7 +9,11 @@ use App\Http\Resources\ProjectResource;
 use App\Models\Organisation;
 use App\Models\OrganisationCategory;
 use App\Models\Project;
+use App\Models\ProjectBudget;
 use App\Models\ProjectHumanitarianScope;
+use App\Models\ProjectParticipatingOrg;
+use App\Models\ProjectRecipientRegion;
+use App\Models\ProjectSector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -32,9 +36,11 @@ class ProjectsController extends Controller
         
         $validator = Validator::make($request->all(),[
             'project_title' => 'required|max:255',
-            'sectors' => 'array',
+            'sectors' => 'array|required',
             'budgets' => 'array|required',
+            'transactions' => 'array|required',
             'participating_organisations' => 'array|required',
+            'recipient_countries' => 'array|required',
             'project_objective' => 'required|max:255',
             'project_planned_start_date' => 'date|required',
             'project_planned_end_date' => 'required|date',
@@ -111,7 +117,7 @@ class ProjectsController extends Controller
                 ]);
 
                 $project_planned_end_date = $project->activity_dates()->create([
-                    'type' => 1,
+                    'type' => 3,
                     'iso_date' => $request->project_planned_end_date
                 ]);
                 
@@ -123,7 +129,7 @@ class ProjectsController extends Controller
                 if ($request->project_actual_start_date)
                 {
                     $project_actual_start_date = $project->activity_dates()->create([
-                        'type' => 1,
+                        'type' => 2,
                         'iso_date' => $request->project_actual_start_date
                     ]);
                     
@@ -136,7 +142,7 @@ class ProjectsController extends Controller
                 if ($request->project_actual_end_date)
                 {
                     $project_actual_end_date = $project->activity_dates()->create([
-                        'type' => 1,
+                        'type' => 4,
                         'iso_date' => $request->project_actual_end_date
                     ]);
                     
@@ -165,18 +171,30 @@ class ProjectsController extends Controller
                     
                 }
 
-                $recipient_country = $project->recipient_countries()->create([
-                    'code' => $request->recipient_country ?? 'SS',
-                    'percentage' => 100
-                ]);
+                $recipient_countries = $request->recipient_countries;
 
-                if ($request->recipient_country_narrative) 
-                {
-                    $recipient_country->narratives()->create([
-                        'narrative' => $request->recipient_country_narrative,
-                        'lang' => $request->user()->language ?? 'en',
+                foreach($recipient_countries as $country) {
+
+                    $recipient_country = $project->recipient_countries()->create([
+                        'code' => $country['country_code'] ?? 'SS',
+                        'percentage' => $country['country_percentage'] ?? 100
                     ]);
+
+                    if (!empty($country['narratives'])) 
+                    {
+                        $country_narratives = $country['narratives'];
+
+                        foreach($country_narratives as $narrative) {
+                            $recipient_country->narratives()->create([
+                                'narrative' => $narrative,
+                                'lang' => $narrative['lang'] ?? $request->user()->language ?? 'en',
+                            ]);
+                        }
+                        
+                    }
                 }
+
+                
 
                 foreach ($regions as $region) {
                     $recipient_region = $project->recipient_regions()->create([
@@ -219,6 +237,85 @@ class ProjectsController extends Controller
                         'role' => $organisation['role'],
                     ]);
                 }
+
+                $transactions = $request->transactions;
+                foreach ($transactions as $transaction) {
+                    $thisTransaction = $project->transactions()->create([
+                        "ref" => $transaction['ref'],
+                        "humanitarian" => $transaction['humanitratian'] ?? 0,
+                        "transaction_type_code" => $transaction['transaction_type_code'],
+                        "transaction_date" => $transaction['transaction_date'],
+                        "value_currency" => $transaction['value_currency'],
+                        "value_date" => $transaction['value_date'],
+                        "value_amount" => $transaction['value_amount'],
+                        "disbursement_channel_code" => $transaction['disbursement_channel_code'],
+                        "recipient_country_code" => $transaction['recipient_country_code'],
+                        "recipient_region_code" => $transaction['recipient_region_code'],
+                        "recipient_region_vocabulary" => $transaction['recipient_region_vocabulary'],
+                        "flow_type_code" => $transaction['flow_type_code'],
+                        "finance_type_code" => $transaction['finance_type_code'],
+                        "tied_status_code" => $transaction['tied_status_code'],
+                    ]);
+
+                    if (!empty($transaction['sectors'])) {
+                        $sectors = $transaction['sectors'];
+                        foreach ($sectors as $sector) {
+                            $transactionSector = $thisTransaction->sectors()->create([
+                                'vocabulary' => $sector['sector_vocabulary'],
+                                'vocabulary_uri' => $sector['sector_vocabulary_uri'] ?? null,
+                                'code' => $sector['sector_code'],
+                            ]);
+
+                            if (!empty($sector['sector_narrative'])) {
+                                $sector_narrative = $sector['sector_narrative'] ?? [];
+                                foreach($sector_narrative as $narrative) {
+                                    $transactionSector->narratives()->create([
+                                        'narrative' => $narrative['narrative'],
+                                        'lang' => $narrative['lang'] ?? $request->user()->language ?? 'en',
+                                    ]);
+                                }
+                            }
+                        }
+                        
+                    }
+                    if (!empty($transaction['provider_org'])) {
+
+                        $provider_org = $transaction['provider_org'];
+                        $thisProviderOrg = $thisTransaction->provider_org()->create([
+                            'organisation_id' => $provider_org['organisation_id'],
+                            'type' => $provider_org['type'],
+                            'ref' => $provider_org['ref'] ?? null,
+                        ]);
+
+                        if (!empty($provider_org['narrative'])) {
+                            $thisProviderOrg->narratives()->create([
+                                'narrative' => $provider_org['narrative'],
+                                'lang' => $provider_org['lang'] ?? $request->user()->language ?? 'en',
+                            ]);
+                            
+                        }
+                    }
+
+                    if (!empty($transaction['receiver_org'])) {
+
+                        $receiver_org = $transaction['receiver_org'];
+                        $thisReceiverOrg = $thisTransaction->receiver_org()->create([
+                            'organisation_id' => $receiver_org['organisation_id'],
+                            'type' => $receiver_org['type'],
+                            'ref' => $receiver_org['ref'] ?? null,
+                        ]);
+
+                        if (!empty($receiver_org['narrative'])) {
+                            $thisReceiverOrg->narratives()->create([
+                                'narrative' => $receiver_org['narrative'],
+                                'lang' => $receiver_org['lang'] ?? $request->user()->language ?? 'en',
+                            ]);
+                            
+                        }
+                    }
+                }
+
+                
                 
 
                 DB::commit();
@@ -239,12 +336,13 @@ class ProjectsController extends Controller
         {
             return response()->error('Unauthorized', 403); 
         }
-        
+
         $validator = Validator::make($request->all(),[
             'project_title' => 'required|max:255',
-            'sectors' => 'array',
+            'sectors' => 'array|required',
             'budgets' => 'array|required',
             'participating_organisations' => 'array|required',
+            'recipient_countries' => 'array|required',
             'project_objective' => 'required|max:255',
             'project_planned_start_date' => 'date|required',
             'project_planned_end_date' => 'required|date',
@@ -252,7 +350,7 @@ class ProjectsController extends Controller
             'project_actual_end_date' => 'nullable|date',
             'organisation_id' => 'required|exists:organisations,id',
             'activity_scope' => 'nullable|numeric',
-            'activity_status' => 'required|numeric',
+            'activity_status' => 'required|numeric'
             //'is_iati_project' => 'boolean',
 
         ]);
@@ -322,7 +420,7 @@ class ProjectsController extends Controller
                 ]);
 
                 $project_planned_end_date = $project->activity_dates()->updateOrCreate([
-                    'type' => 1,
+                    'type' => 3,
                     'iso_date' => $request->project_planned_end_date
                 ]);
                 
@@ -334,7 +432,7 @@ class ProjectsController extends Controller
                 if ($request->project_actual_start_date)
                 {
                     $project_actual_start_date = $project->activity_dates()->updateOrCreate([
-                        'type' => 1,
+                        'type' => 2,
                         'iso_date' => $request->project_actual_start_date
                     ]);
                     
@@ -347,7 +445,7 @@ class ProjectsController extends Controller
                 if ($request->project_actual_end_date)
                 {
                     $project_actual_end_date = $project->activity_dates()->updateOrCreate([
-                        'type' => 1,
+                        'type' => 4,
                         'iso_date' => $request->project_actual_end_date
                     ]);
                     
@@ -376,17 +474,29 @@ class ProjectsController extends Controller
                     
                 }
 
-                $recipient_country = $project->recipient_countries()->updateOrCreate([
-                    'code' => $request->recipient_country ?? 'SS',
-                    'percentage' => 100
-                ]);
+               
 
-                if ($request->recipient_country_narrative) 
-                {
-                    $recipient_country->narratives()->updateOrCreate([
-                        'narrative' => $request->recipient_country_narrative,
-                        'lang' => $request->user()->language ?? 'en',
+                $recipient_countries = $request->recipient_countries;
+
+                foreach($recipient_countries as $country) {
+
+                    $recipient_country = $project->recipient_countries()->updateOrCreate([
+                        'code' => $country['country_code'] ?? 'SS',
+                        'percentage' => $country['country_percentage'] ?? 100
                     ]);
+
+                    if (!empty($country['narratives'])) 
+                    {
+                        $country_narratives = $country['narratives'];
+
+                        foreach($country_narratives as $narrative) {
+                            $recipient_country->narratives()->updateOrCreate([
+                                'narrative' => $narrative,
+                                'lang' => $narrative['lang'] ?? $request->user()->language ?? 'en',
+                            ]);
+                        }
+                        
+                    }
                 }
 
                 foreach ($regions as $region) {
@@ -459,7 +569,7 @@ class ProjectsController extends Controller
     public function index(Request $request)
     {
        // $project = Project::first();
-        return response()->success(ProjectResource::collection(Project::all()));
+        return response()->success(ProjectResource::collection(Project::paginate(20)));
     }
 
     public function destroy(Request $request, $id)
@@ -479,6 +589,78 @@ class ProjectsController extends Controller
         }
 
         $category->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteParticipatingOrg(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $participating_org = ProjectParticipatingOrg::find($id);
+        if (!$participating_org)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $participating_org->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteProjectBudget(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $project_budget = ProjectBudget::find($id);
+        if (!$project_budget)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $project_budget->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteProjectSector(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $project_sector = ProjectSector::find($id);
+        if (!$project_sector)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $project_sector->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteRecipientRegion(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $project_recipient_region = ProjectRecipientRegion::find($id);
+        if (!$project_recipient_region)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $project_recipient_region->delete();
 
         return response()->success(__('messages.success_deleted'));
     }

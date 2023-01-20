@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('codelist_options', function (Blueprint $table) {
+        Schema::create('codelist_translations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('codelist_id')->constrained('codelists')->onDelete('cascade');            
-            $table->string('code');
+            $table->foreignId('codelist_option_id')->constrained('codelist_options')->onDelete('cascade');
+            $table->string('lang');
             $table->text('name');
             $table->text('description')->nullable();
-            $table->string('related_codelist')->nullable();
             $table->timestamps();
-            $table->unique(['codelist_id', 'code']);
+            $table->unique(['codelist_option_id', 'lang']);
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('codelist_options');
+        Schema::dropIfExists('codelist_translations');
     }
 };

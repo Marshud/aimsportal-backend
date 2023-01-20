@@ -4,8 +4,15 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProjectTransactionProviderOrgResource extends JsonResource
+class CodelistTranslationResource extends JsonResource
 {
+
+    /**
+     * The "data" wrapper that should be applied.
+     *
+     * @var string|null
+     */
+   // public static $wrap = 'user';
     /**
      * Transform the resource into an array.
      *
@@ -16,11 +23,9 @@ class ProjectTransactionProviderOrgResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'organisation_id' => $this->organisation_id,
-            'iati_type' => $this->type,
-            'iati_ref' => $this->ref,
-            'iati_provider_activity_id' => $this->provider_activity_id,
-            'type' => $this->iati_type()->name ?? null,
+            'code' => $this->codelist_option->code,
+            'name' => $this->name,
+            'description' => $this->description
         ];
     }
 }

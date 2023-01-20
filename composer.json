@@ -10,6 +10,7 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "nunomaduro/termwind": "^1.15",
         "owen-it/laravel-auditing": "^13.0",
         "santigarcor/laratrust": "^7.1"
     },

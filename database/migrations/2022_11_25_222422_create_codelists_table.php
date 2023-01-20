@@ -17,12 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('version')->default('2.0.3');
-            $table->string('iati_xml_id')->nullable();
-            $table->string('name_narrative')->nullable();
-            $table->string('description')->nullable();
-            $table->string('lang')->default('en');
+            $table->text('description')->nullable();
             $table->boolean('is_namespaced')->default(false);
-            $table->string('slug_name')->nullable();
+            $table->string('slug_name')->nullable()->unique();
             $table->timestamps();
         });
     }

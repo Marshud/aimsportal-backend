@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'status' => $this->status,
             'email' => $this->email,
+            'language' => $this->language,
             'organisation' => ($this->current_organisation_id) ? new OrganisationResource($this->currentOrganisation) : null,
             'roles' => RolesResource::collection($this->roles)
 

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Resources\CodelistTranslationResource;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Schema;
@@ -42,5 +43,7 @@ class AppServiceProvider extends ServiceProvider
                 'errors' => $error_data,
             ],$status_code);
         });
+
+       // CodelistTranslationResource::withoutWrapping();
     }
 }

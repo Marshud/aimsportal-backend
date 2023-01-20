@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('codelist_options', function (Blueprint $table) {
+        Schema::create('verified_applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('codelist_id')->constrained('codelists')->onDelete('cascade');            
-            $table->string('code');
-            $table->text('name');
-            $table->text('description')->nullable();
-            $table->string('related_codelist')->nullable();
+            $table->string('name')->unique();
+            $table->string('app_token');
+            $table->boolean('disabled')->default(false);
+            $table->text('ip_addresses')->nullable();
             $table->timestamps();
-            $table->unique(['codelist_id', 'code']);
         });
     }
 
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('codelist_options');
+        Schema::dropIfExists('verified_applications');
     }
 };
