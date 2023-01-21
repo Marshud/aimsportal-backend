@@ -7,6 +7,7 @@ use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrganisationResource;
 use App\Http\Resources\UserResource;
+use App\Mail\NewUserRequestToJoinOrganisation;
 use App\Mail\SignupStarted;
 use App\Models\EmailVerification;
 use App\Models\Organisation;
@@ -103,9 +104,14 @@ class UserController extends Controller
         }
 
         if ($organisation_users->count() > 1) {
-            // email users in the organisation1=
+
             $users_except_applicant = $organisation_users->where('id','!=',$aims_user->id);
-            Log::debug(['organisation_users' => $users_except_applicant]);
+            try {
+                Mail::to($users_except_applicant)->send(new NewUserRequestToJoinOrganisation($aims_user));
+            } catch(\Exception $e) {
+                Log::error(['EMAIL_SEND_ERROR' => $e->getMessage()]);
+            }
+            
         }
 
         return response()->success(__('messages.success'));
