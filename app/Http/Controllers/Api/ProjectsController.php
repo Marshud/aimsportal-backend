@@ -14,6 +14,7 @@ use App\Models\ProjectHumanitarianScope;
 use App\Models\ProjectParticipatingOrg;
 use App\Models\ProjectRecipientRegion;
 use App\Models\ProjectSector;
+use App\Models\ProjectTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -313,6 +314,17 @@ class ProjectsController extends Controller
                             
                         }
                     }
+
+                    if (!empty($transaction['aid_types'])) {
+
+                        foreach($transaction['aid_types'] as $aidType) {
+                            $thisTransaction->aid_types()->create([
+                                'code' => $aidType['code'],
+                                'vocabulary' => $aidType['vocabulary']
+                            ]);
+                        }
+                        
+                    }
                 }
 
                 
@@ -341,6 +353,7 @@ class ProjectsController extends Controller
             'project_title' => 'required|max:255',
             'sectors' => 'array|required',
             'budgets' => 'array|required',
+            'transactions' => 'array|required',
             'participating_organisations' => 'array|required',
             'recipient_countries' => 'array|required',
             'project_objective' => 'required|max:255',
@@ -540,6 +553,94 @@ class ProjectsController extends Controller
                         'role' => $organisation['role'],
                     ]);
                 }
+
+                $transactions = $request->transactions;
+                foreach ($transactions as $transaction) {
+                    $thisTransaction = $project->transactions()->updateOrCreate([
+                        "ref" => $transaction['ref'],
+                        "humanitarian" => $transaction['humanitratian'] ?? 0,
+                        "transaction_type_code" => $transaction['transaction_type_code'],
+                        "transaction_date" => $transaction['transaction_date'],
+                        "value_currency" => $transaction['value_currency'],
+                        "value_date" => $transaction['value_date'],
+                        "value_amount" => $transaction['value_amount'],
+                        "disbursement_channel_code" => $transaction['disbursement_channel_code'],
+                        "recipient_country_code" => $transaction['recipient_country_code'],
+                        "recipient_region_code" => $transaction['recipient_region_code'],
+                        "recipient_region_vocabulary" => $transaction['recipient_region_vocabulary'],
+                        "flow_type_code" => $transaction['flow_type_code'],
+                        "finance_type_code" => $transaction['finance_type_code'],
+                        "tied_status_code" => $transaction['tied_status_code'],
+                    ]);
+
+                    if (!empty($transaction['sectors'])) {
+                        $sectors = $transaction['sectors'];
+                        foreach ($sectors as $sector) {
+                            $transactionSector = $thisTransaction->sectors()->updateOrCreate([
+                                'vocabulary' => $sector['sector_vocabulary'],
+                                'vocabulary_uri' => $sector['sector_vocabulary_uri'] ?? null,
+                                'code' => $sector['sector_code'],
+                            ]);
+
+                            if (!empty($sector['sector_narrative'])) {
+                                $sector_narrative = $sector['sector_narrative'] ?? [];
+                                foreach($sector_narrative as $narrative) {
+                                    $transactionSector->narratives()->updateOrcreate([
+                                        'narrative' => $narrative['narrative'],
+                                        'lang' => $narrative['lang'] ?? $request->user()->language ?? 'en',
+                                    ]);
+                                }
+                            }
+                        }
+                        
+                    }
+                    if (!empty($transaction['provider_org'])) {
+
+                        $provider_org = $transaction['provider_org'];
+                        $thisProviderOrg = $thisTransaction->provider_org()->updateOrCreate([
+                            'organisation_id' => $provider_org['organisation_id'],
+                            'type' => $provider_org['type'],
+                            'ref' => $provider_org['ref'] ?? null,
+                        ]);
+
+                        if (!empty($provider_org['narrative'])) {
+                            $thisProviderOrg->narratives()->updateOrCreate([
+                                'narrative' => $provider_org['narrative'],
+                                'lang' => $provider_org['lang'] ?? $request->user()->language ?? 'en',
+                            ]);
+                            
+                        }
+                    }
+
+                    if (!empty($transaction['receiver_org'])) {
+
+                        $receiver_org = $transaction['receiver_org'];
+                        $thisReceiverOrg = $thisTransaction->receiver_org()->updateOrCreate([
+                            'organisation_id' => $receiver_org['organisation_id'],
+                            'type' => $receiver_org['type'],
+                            'ref' => $receiver_org['ref'] ?? null,
+                        ]);
+
+                        if (!empty($receiver_org['narrative'])) {
+                            $thisReceiverOrg->narratives()->updateOrCreate([
+                                'narrative' => $receiver_org['narrative'],
+                                'lang' => $receiver_org['lang'] ?? $request->user()->language ?? 'en',
+                            ]);
+                            
+                        }
+                    }
+
+                    if (!empty($transaction['aid_types'])) {
+
+                        foreach($transaction['aid_types'] as $aidType) {
+                            $thisTransaction->aid_types()->updateOrCreate([
+                                'code' => $aidType['code'],
+                                'vocabulary' => $aidType['vocabulary']
+                            ]);
+                        }
+                        
+                    }
+                }
                 
 
                 DB::commit();
@@ -574,21 +675,17 @@ class ProjectsController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        if (!$request->user()->isAbleTo('delete-organisation-categories'))
+        if (!$request->user()->isAbleTo('delete-projects'))
         {
             return response()->error('Unauthorized', 403); 
         }
 
-        $category = OrganisationCategory::find($id);
-        if (!$category) {
+        $project = Project::find($id);
+        if (!$project) {
             return response()->error(__('messages.not_found'), 404);
-        }
+        } 
 
-        if ($category->organisations()->exists()) {
-            return response()->error(__('messages.error_delete'), 400);
-        }
-
-        $category->delete();
+        $project->delete();
 
         return response()->success(__('messages.success_deleted'));
     }
@@ -661,6 +758,27 @@ class ProjectsController extends Controller
         }
 
         $project_recipient_region->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteTransaction(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $project_transaction = ProjectTransaction::find($id);
+        if (!$project_transaction)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $project_transaction->sectors()->delete();
+        $project_transaction->provider_org()->delete();
+        $project_transaction->receiver_org()->delete();
+        $project_transaction->delete();
 
         return response()->success(__('messages.success_deleted'));
     }

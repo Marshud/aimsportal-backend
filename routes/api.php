@@ -64,6 +64,7 @@ Route::group(['prefix' => 'projects', 'as' => 'projects.'], function() {
     Route::delete('/budget/{id}', [ProjectsController::class, 'deleteProjectBudget']);
     Route::delete('/sector/{id}', [ProjectsController::class, 'deleteProjectSector']);
     Route::delete('/recipient-region/{id}', [ProjectsController::class, 'deleteRecipientRegion']);
+    Route::delete('/transaction/{id}', [ProjectsController::class, 'deleteTransaction']);
 });
 
 Route::group(['prefix' => 'general', 'as' => 'general.'], function() {
