@@ -83,6 +83,39 @@ class ReportsController extends Controller
         
     }
 
+    public function reportOnFundingBySource(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'currency' => 'nullable|string',
+            'number_of_years' => 'nullable|numeric'
+
+        ]); 
+        $currency = $request->currency ?? 'USD';
+        $no_of_years = $request->number_of_years ?? 6;
+        if ($validator->fails()) {
+                
+            return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
+        }
+
+       $report = DB::table('projects')
+            ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
+            ->join('project_transaction_provider_org', 'project_transactions.id', '=', 'project_transaction_provider_org.project_transaction_id')
+            ->selectRaw('project_transaction_provider_org.organisation_id as organisation, sum(value_amount) as data')
+            ->where('project_transactions.value_currency', $currency)
+            ->groupBy('organisation')
+            ->orderBy('data', 'desc')
+            //->limit($no_of_years)
+            ->get();
+        $filtered = $report->map(function ($item) {
+            return [
+                'organisation' => Organisation::find($item->organisation)->name ?? 'unknown',
+                'data' => $item->data
+            ];
+        });
+        return $filtered;
+        
+    }
+
     private function getSectorCode($vocabulary, $code)
     {
         $sectorVocabulary = iati_get_code_value('SectorVocabulary', $vocabulary);

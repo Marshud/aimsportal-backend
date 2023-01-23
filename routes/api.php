@@ -83,4 +83,5 @@ Route::group(['prefix' => 'general', 'as' => 'general.'], function() {
 Route::group(['prefix' => 'reports', 'as' => 'reports.'], function() {
     Route::any('funding-trend', [ReportsController::class, 'reportOnFundingTrends']);
     Route::any('funding-by-sector', [ReportsController::class, 'reportOnFundingBySector']);
+    Route::any('funding-by-source', [ReportsController::class, 'reportOnFundingBySource']);
 });
