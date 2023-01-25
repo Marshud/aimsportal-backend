@@ -3,6 +3,7 @@
 use App\Http\Resources\CodelistTranslationResource;
 use App\Models\Codelist;
 use App\Models\CodelistOption;
+use App\Models\SystemSetting;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -46,6 +47,26 @@ function transform_translation(Collection $translations)
     });
 
     return $modified;
+}
+
+if(!function_exists('get_system_setting')){
+    function get_system_setting(string $settingKey) : ?string
+    {
+        $systemSettings = Cache::remember('system_settings',now()->addHours(2), function () {
+            return SystemSetting::all();
+        });
+        if($systemSettings->isEmpty()) return null;
+        
+        return $systemSettings->where('key', $settingKey)->first()->value ?? null;
+    }
+}
+
+if(!function_exists('set_system_setting')){
+    function set_system_setting(string $settingKey, string $settingValue)
+    {
+        SystemSetting::updateOrCreate(['key' => $settingKey, 'value' => $settingValue]);
+        
+    }
 }
 
 

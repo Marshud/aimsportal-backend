@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CurrencyConvertController;
 use App\Http\Controllers\Api\CustomFieldsController;
 use App\Http\Controllers\Api\IatiHelperController;
 use App\Http\Controllers\Api\LanguagesController;
@@ -73,9 +74,12 @@ Route::group(['prefix' => 'general', 'as' => 'general.'], function() {
         Route::any('get-options', [IatiHelperController::class, 'getCodelistOptions']);
         Route::any('get-value', [IatiHelperController::class, 'getCodelistValue']);
     });
-    Route::group(['prefix' => 'languages', 'as' => 'languagegs.'], function() {
+    Route::group(['prefix' => 'languages', 'as' => 'languages.'], function() {
         Route::any('/', [LanguagesController::class, 'index']);
         Route::any('get-translations', [LanguagesController::class, 'appTranslations']);
+    });
+    Route::group(['prefix' => 'currency', 'as' => 'currency.'], function() {
+        Route::any('convert', [CurrencyConvertController::class, 'index']);
     });
     
 });
