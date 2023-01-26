@@ -9,7 +9,7 @@ use Throwable;
 
 class FixerCurrencyExchangeService implements CurrencyConversionInterface
 {
-    public function convert(string $sourceCurrency, string $destinationCurrency, float $amount) :?float
+    public function convert(string $sourceCurrency, string $destinationCurrency, float $amount = 1) :?float
     {
         $appId = get_system_setting('fixer_api_key') ?? '12345678';
         $url = "https://api.apilayer.com/fixer/latest?base=".$sourceCurrency."&symbols=".$destinationCurrency;

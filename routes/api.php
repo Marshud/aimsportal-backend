@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\OrganisationCategoryController;
 use App\Http\Controllers\Api\OrganisationController;
 use App\Http\Controllers\Api\ProjectsController;
 use App\Http\Controllers\Api\ReportsController;
+use App\Http\Controllers\Api\SystemSettingsController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -88,4 +89,9 @@ Route::group(['prefix' => 'reports', 'as' => 'reports.'], function() {
     Route::any('funding-trend', [ReportsController::class, 'reportOnFundingTrends']);
     Route::any('funding-by-sector', [ReportsController::class, 'reportOnFundingBySector']);
     Route::any('funding-by-source', [ReportsController::class, 'reportOnFundingBySource']);
+});
+
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
+    Route::get('system-settings', [SystemSettingsController::class, 'getSystemSettings']);
+    Route::post('system-settings', [SystemSettingsController::class, 'storeSystemSettings']);
 });

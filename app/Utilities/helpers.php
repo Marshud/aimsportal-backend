@@ -50,11 +50,12 @@ function transform_translation(Collection $translations)
 }
 
 if(!function_exists('get_system_setting')){
-    function get_system_setting(string $settingKey) : ?string
+    function get_system_setting(string $settingKey, bool $cached = true) : ?string
     {
-        $systemSettings = Cache::remember('system_settings',now()->addHours(2), function () {
-            return SystemSetting::all();
-        });
+        $systemSettings = ($cached) ? 
+            Cache::remember('system_settings',now()->addHours(2), function () {
+                return SystemSetting::all();
+            }) : SystemSetting::all();
         if($systemSettings->isEmpty()) return null;
         
         return $systemSettings->where('key', $settingKey)->first()->value ?? null;
@@ -64,7 +65,7 @@ if(!function_exists('get_system_setting')){
 if(!function_exists('set_system_setting')){
     function set_system_setting(string $settingKey, string $settingValue)
     {
-        SystemSetting::updateOrCreate(['key' => $settingKey, 'value' => $settingValue]);
+        SystemSetting::updateOrCreate(['key' => $settingKey], ['value' => $settingValue]);
         
     }
 }
