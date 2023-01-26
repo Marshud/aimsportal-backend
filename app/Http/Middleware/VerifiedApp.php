@@ -18,14 +18,14 @@ class VerifiedApp
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!$request->has('app_token'))
+        if(!$this->hasAppKey($request))
         {
             //Log::info(["checkToken-none"=>$request->all()]);
             return response()->error('Unauthorized', 403);
 
         }
-
-        $token = VerifiedApplication::where('app_token',$request->app_token)->first();
+        $sent_token = $request->app_token ?? $request->header('app_token');
+        $token = VerifiedApplication::where('app_token',$sent_token)->first();
         if(!$token)
         {
             //Log::info(["checkToken-nomatch"=>$request->all()]);
@@ -45,5 +45,14 @@ class VerifiedApp
         }
         
         return $next($request);
+    }
+
+    private function hasAppKey(Request $request)
+    {
+        if ($request->has('app_token')) return true;
+        if ($request->hasHeader('app_token')) return true;
+        
+        return false;
+
     }
 }
