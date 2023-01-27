@@ -20,15 +20,15 @@ class VerifiedApp
     {
         if(!$this->hasAppKey($request))
         {
-            Log::info(["checkToken-none"=>$request->all()]);
+            Log::info(["checkToken-none"=>$request->headers]);
             return response()->error('Unauthorized', 403);
 
         }
-        $sent_token = $request->app_token ?? $request->header('app_token');
+        $sent_token = $request->app_token ?? $request->header('app-token') ?? $request->header('app_token');
         $token = VerifiedApplication::where('app_token',$sent_token)->first();
         if(!$token)
         {
-            Log::info(["checkToken-nomatch"=>$request->all()]);
+            Log::info(["checkToken-nomatch"=>$request->headers]);
             return response()->error('Unauthorized', 403);
         }
         if ($token->disabled) return response()->error('Unauthorized', 403);
@@ -38,7 +38,7 @@ class VerifiedApp
         if ($token_ip_addresses) {
             if(!in_array($request->ip(),$token_ip_addresses))
             {
-                Log::info(["checkToken-badip"=>$request->all()]);
+                Log::info(["checkToken-badip"=>$request->headers]);
                 return response()->error('Unauthorized', 403);
                 
             }
@@ -49,9 +49,8 @@ class VerifiedApp
 
     private function hasAppKey(Request $request)
     {
-        if ($request->has('app_token')) return true;
-        if ($request->hasHeader('app_token')) return true;
-        
+        if ($request->has('app_token') || $request->hasHeader('app-token') || $request->hasHeader('app_token')) return true;
+                
         return false;
 
     }
