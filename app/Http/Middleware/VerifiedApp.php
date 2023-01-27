@@ -20,7 +20,7 @@ class VerifiedApp
     {
         if(!$this->hasAppKey($request))
         {
-            //Log::info(["checkToken-none"=>$request->all()]);
+            Log::info(["checkToken-none"=>$request->all()]);
             return response()->error('Unauthorized', 403);
 
         }
@@ -28,7 +28,7 @@ class VerifiedApp
         $token = VerifiedApplication::where('app_token',$sent_token)->first();
         if(!$token)
         {
-            //Log::info(["checkToken-nomatch"=>$request->all()]);
+            Log::info(["checkToken-nomatch"=>$request->all()]);
             return response()->error('Unauthorized', 403);
         }
         if ($token->disabled) return response()->error('Unauthorized', 403);
@@ -38,7 +38,7 @@ class VerifiedApp
         if ($token_ip_addresses) {
             if(!in_array($request->ip(),$token_ip_addresses))
             {
-                //Log::info(["checkToken-badip"=>$request->all()]);
+                Log::info(["checkToken-badip"=>$request->all()]);
                 return response()->error('Unauthorized', 403);
                 
             }
