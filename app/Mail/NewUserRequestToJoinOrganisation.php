@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\EmailVerification;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,25 +10,25 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SignupStarted extends Mailable
+class NewUserRequestToJoinOrganisation extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * The new userinstance.
      *
-     * @var \App\Models\EmailVerification
+     * @var \App\Models\User
      */
-    public $emailVerification;
+    public $newUser;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(EmailVerification $emailVerification)
+    public function __construct(User $newUser)
     {
-        $this->emailVerification = $emailVerification;
+        $this->newUser = $newUser;
     }
 
     /**
@@ -39,7 +39,7 @@ class SignupStarted extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'OTP Code',
+            subject: 'New User Request To Join Organisation',
         );
     }
 
@@ -51,7 +51,7 @@ class SignupStarted extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'emails.users.otp-code',            
+            markdown: 'emails.users.join-organisation',
         );
     }
 

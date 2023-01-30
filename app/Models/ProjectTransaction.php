@@ -30,5 +30,10 @@ class ProjectTransaction extends Model
     {
         return $this->hasOne(ProjectTransactionReceiverOrg::class, 'project_transaction_id');
     }
+
+    public function aid_types()
+    {
+        return $this->hasMany(ProjectTransactionAidType::class, 'project_transaction_id');
+    }
     
 }
