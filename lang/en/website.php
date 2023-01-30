@@ -11,11 +11,11 @@ return [
     |
     */
 
-    'account' => 'account',
-    'profile' => 'profile',
-    'logout' => 'logout',
-    'organisations' => 'organisations',
-    'projects' => 'projects',
-    'home' => 'home',
+    'account' => 'Account',
+    'profile' => 'Profile',
+    'logout' => 'Logout',
+    'organisations' => 'Organisations',
+    'projects' => 'Projects',
+    'home' => 'Home',
 
 ];
