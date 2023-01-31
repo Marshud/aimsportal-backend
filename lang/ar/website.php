@@ -17,6 +17,6 @@ return [
     'organisations' => 'المنظمات',
     'projects' => 'المشاريع',
     'home' => 'بداية',
-    'about-us' => 'من نحن',
+    'aboutus' => 'من نحن',
 
 ];
