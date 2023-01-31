@@ -18,5 +18,9 @@ return [
     'projects' => 'Projects',
     'home' => 'Home',
     'aboutus' => 'About Us',
+    'donors' => 'Donors',
+    'support' => 'Support',
+    'inquiries' => 'Inquiries',
+    ''
 
 ];

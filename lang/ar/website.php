@@ -18,5 +18,13 @@ return [
     'projects' => 'المشاريع',
     'home' => 'بداية',
     'aboutus' => 'من نحن',
-
+    'donors' => 'المتبرعين',
+    'support' => 'الدعم',
+    'inquiries' => 'استفسارات',
+    'helpdesk' => 'مكتب المساعدة',
+    'faqs' => 'أسئلة وأجوبة',
+    'legal' => 'قانوني',
+    'termsofuse' => 'شروط الاستخدام',
+    'privacypolicy' => 'سياسة الخصوصية',
+    'administration' => 'إدارة',
 ];
