@@ -21,6 +21,11 @@ return [
     'donors' => 'Donors',
     'support' => 'Support',
     'inquiries' => 'Inquiries',
-    ''
+    'helpdesk' => 'Help Desk',
+    'faqs' => 'FAQs',
+    'legal' => 'Legal',
+    'termsofuse' => 'Terms of Use',
+    'privacypolicy' => 'Privacy Policy',
+    'administration' => 'Administration',
 
 ];
