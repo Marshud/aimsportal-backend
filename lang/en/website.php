@@ -17,5 +17,6 @@ return [
     'organisations' => 'Organisations',
     'projects' => 'Projects',
     'home' => 'Home',
+    'about-us' => 'About Us',
 
 ];
