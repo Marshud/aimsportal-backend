@@ -19,6 +19,7 @@ return [
     'invalid_request' => 'Invalid request data',
     'not_found' => 'Resource not found',
     'unauthorized' => 'Action is not Authorized',
-    'email_not_sent' => 'Error Sending Email, try again later'
+    'email_not_sent' => 'Error Sending Email, try again later',
+    'invalid_transaction' => 'Please add atleast one Funding Transaction or Expenditure'
 
 ];

@@ -14,15 +14,15 @@ class OrganisationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum', 'isapproved'])->except('index');
+        $this->middleware(['auth:sanctum', 'isapproved'])->except('index','store');
     }
 
     public function store(Request $request)
     {
-        if (!$request->user()->isAbleTo('create-organisations'))
-        {
-            return response()->error('Unauthorized', 403); 
-        }
+        // if (!$request->user()->isAbleTo('create-organisations'))
+        // {
+        //     return response()->error('Unauthorized', 403); 
+        // }
         $validator = Validator::make($request->all(),[
             'name' => 'required|unique:organisations',
             'acronym' => 'required|string|max:8',
@@ -46,7 +46,8 @@ class OrganisationController extends Controller
         $organisation->category_id = $request->category_id;
         $organisation->contact_person_name = $request->contact_person_name;
         $organisation->contact_person_email = $request->contact_person_email;
-        $organisation->address = $request->address;
+        $organisation->address = $request->address ?? 'none';
+        $organisation->contact_person_phone = $request->contact_person_phone ?? null;
         $organisation->approved = $request->approved ?? false;
         $organisation->description = $request->description ?? null;
         $organisation->save();
