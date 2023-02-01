@@ -52,6 +52,8 @@ class ProjectsController extends Controller
             'activity_status' => 'required|numeric'
             //'is_iati_project' => 'boolean',
 
+        ],[
+            'transactions.required' => __('messages.invalid_transaction')
         ]);
         
 
@@ -225,7 +227,9 @@ class ProjectsController extends Controller
                         'period_end' => $budget['period_end'],
                         'value_currency' => $budget['value_currency'],
                         'value_date' => Carbon::parse($budget['value_date'])->format('Y-m-d'),
-                        'value_amount' => $budget['value_amount']
+                        'value_amount' => $budget['value_amount'],
+                        'ssp_value_amount' => $budget['value_amount_ssp'] ?? null,
+                        'usd_value_amount' => $budget['value_amount_usd'] ?? null,
                     ]);
                 }
 
@@ -249,6 +253,8 @@ class ProjectsController extends Controller
                         "value_currency" => $transaction['value_currency'],
                         "value_date" => $transaction['value_date'],
                         "value_amount" => $transaction['value_amount'],
+                        'ssp_value_amount' => $transaction['value_amount_ssp'] ?? null,
+                        'usd_value_amount' => $transaction['value_amount_usd'] ?? null,
                         "disbursement_channel_code" => $transaction['disbursement_channel_code'],
                         "recipient_country_code" => $transaction['recipient_country_code'],
                         "recipient_region_code" => $transaction['recipient_region_code'],
