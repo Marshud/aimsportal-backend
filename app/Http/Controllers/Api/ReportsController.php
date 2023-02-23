@@ -142,6 +142,47 @@ class ReportsController extends Controller
         
     }
 
+    public function reportOnTotalFunding(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'currency' => 'nullable|string',
+            'year' => 'nullable|numeric'
+
+        ]); 
+       
+        if ($validator->fails()) {
+                
+            return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
+        }
+
+        if(!$request->has('year')) {
+            
+            $result = DB::table('projects')
+                ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
+                ->where('project_transactions.transaction_type_code', 1)
+                ->groupBy('project_transactions.id')
+                ->get(['project_transactions.id',DB::raw('sum(project_transactions.value_amount) as value')])
+                ->sum('value');
+        }
+        
+
+        if ($request->has('year')) {
+
+            $year = $request->year;
+
+            $result = DB::table('projects')
+                ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
+                ->where('project_transactions.transaction_type_code', 1)
+                ->whereYear('project_transactions.transaction_date', $year)
+                ->groupBy('project_transactions.id')
+                ->get(['project_transactions.id',DB::raw('sum(project_transactions.value_amount) as value')])
+                ->sum('value');
+        }
+        
+
+        return $result;
+    }
+
     private function getSectorCode($vocabulary, $code)
     {
         $sectorVocabulary = iati_get_code_value('SectorVocabulary', $vocabulary);
