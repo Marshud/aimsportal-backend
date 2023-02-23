@@ -116,6 +116,32 @@ class ReportsController extends Controller
         
     }
 
+    public function reportOnTotalProjectstrends(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'currency' => 'nullable|string',
+            'number_of_years' => 'nullable|numeric'
+
+        ]); 
+        $no_of_years = $request->number_of_years ?? 6;
+        if ($validator->fails()) {
+                
+            return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
+        }
+
+       $report = DB::table('projects')
+            ->join('project_activity_dates', 'projects.id', '=', 'project_activity_dates.project_id')
+            ->selectRaw('YEAR(iso_date) as year, count(DISTINCT projects.id) as data')
+            ->where('project_activity_dates.type', 1)
+            ->groupBy('year')
+            ->orderBy('year', 'desc')
+            ->limit($no_of_years)
+            ->get();
+
+        return $report;
+        
+    }
+
     private function getSectorCode($vocabulary, $code)
     {
         $sectorVocabulary = iati_get_code_value('SectorVocabulary', $vocabulary);
