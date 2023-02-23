@@ -90,6 +90,7 @@ Route::group(['prefix' => 'reports', 'as' => 'reports.'], function() {
     Route::any('funding-by-sector', [ReportsController::class, 'reportOnFundingBySector']);
     Route::any('funding-by-source', [ReportsController::class, 'reportOnFundingBySource']);
     Route::any('total-projects-trend', [ReportsController::class, 'reportOnTotalProjectstrends']);
+    Route::any('funding-total', [ReportsController::class, 'reportOnTotalFunding']);
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
