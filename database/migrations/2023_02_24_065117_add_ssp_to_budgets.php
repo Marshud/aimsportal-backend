@@ -14,9 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('project_budgets', function (Blueprint $table) {
-            if (!Schema::hasColumn('project_budgets', 'ssd_value_amount')) {
-                $table->double('ssd_value_amount')->nullable();
-                $table->double('usd_value_amount')->nullable();
+            if (!Schema::hasColumn('project_budgets', 'ssp_value_amount')) {
+                $table->double('ssp_value_amount')->nullable();
             }
         });
     }
