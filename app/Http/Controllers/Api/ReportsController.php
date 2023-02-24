@@ -10,6 +10,7 @@ use App\Models\Organisation;
 use App\Models\OrganisationCategory;
 use App\Models\Project;
 use App\Models\ProjectHumanitarianScope;
+use App\Models\ProjectTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -156,27 +157,18 @@ class ReportsController extends Controller
         }
 
         if(!$request->has('year')) {
-            
-            $result = DB::table('projects')
-                ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
-                ->where('project_transactions.transaction_type_code', 1)
-                ->groupBy('project_transactions.id')
-                ->get(['project_transactions.id',DB::raw('sum(project_transactions.value_amount) as value')])
-                ->sum('value');
+
+            $result = ProjectTransaction::where('transaction_type_code',1)->sum('value_amount');
         }
         
 
         if ($request->has('year')) {
 
             $year = $request->year;
-
-            $result = DB::table('projects')
-                ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
-                ->where('project_transactions.transaction_type_code', 1)
-                ->whereYear('project_transactions.transaction_date', $year)
-                ->groupBy('project_transactions.id')
-                ->get(['project_transactions.id',DB::raw('sum(project_transactions.value_amount) as value')])
-                ->sum('value');
+            
+            $result = ProjectTransaction::where('transaction_type_code',1)
+                        ->whereYear('project_transactions.transaction_date', $year)
+                        ->sum('value_amount');
         }
         
 
