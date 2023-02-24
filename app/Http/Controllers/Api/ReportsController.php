@@ -167,7 +167,7 @@ class ReportsController extends Controller
             $year = $request->year;
             
             $result = ProjectTransaction::where('transaction_type_code',1)
-                        ->whereYear('project_transactions.transaction_date', $year)
+                        ->whereYear('transaction_date', $year)
                         ->sum('value_amount');
         }
         
