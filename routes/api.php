@@ -90,7 +90,11 @@ Route::group(['prefix' => 'reports', 'as' => 'reports.'], function() {
     Route::any('funding-by-sector', [ReportsController::class, 'reportOnFundingBySector']);
     Route::any('funding-by-source', [ReportsController::class, 'reportOnFundingBySource']);
     Route::any('total-projects-trend', [ReportsController::class, 'reportOnTotalProjectstrends']);
+    Route::any('total-projects-inprogress-trend', [ReportsController::class, 'reportOnTotalProjectsInprogresstrends']);
+    Route::any('total-projects-completed-trend', [ReportsController::class, 'reportOnTotalProjectsCompletedtrends']);
     Route::any('funding-total', [ReportsController::class, 'reportOnTotalFunding']);
+    Route::any('budgets-trend', [ReportsController::class, 'reportOnBudgetingTrends']);
+
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
