@@ -1,0 +1,80 @@
+id,name,state_name,state_id
+1,Juba,Central Equatoria,1
+2,Kajo-keji,Central Equatoria,1
+3,Lainya,Central Equatoria,1
+4,Morobo,Central Equatoria,1
+5,Terekeka,Central Equatoria,1
+6,Yei,Central Equatoria,1
+7,Budi,Eastern Equatoria,2
+8,Ikotos,Eastern Equatoria,2
+9,Kapoeta East,Eastern Equatoria,2
+10,Kapoeta North,Eastern Equatoria,2
+11,Kapoeta South,Eastern Equatoria,2
+12,Lafon,Eastern Equatoria,2
+13,Magwi,Eastern Equatoria,2
+14,Torit,Eastern Equatoria,2
+15,Akobo,Jonglei,3
+16,Ayod,Jonglei,3
+17,Bor South,Jonglei,3
+18,Canal/Pigi,Jonglei,3
+19,Duk,Jonglei,3
+20,Fangak,Jonglei,3
+21,Nyirol,Jonglei,3
+22,Pibor,Jonglei,3
+23,Pochalla,Jonglei,3
+24,Twic East,Jonglei,3
+25,Uror,Jonglei,3
+26,Awerial,Lakes,4
+27,Cueibet,Lakes,4
+28,Rumbek Centre,Lakes,4
+29,Rumbek East,Lakes,4
+30,Rumbek North,Lakes,4
+31,Wulu,Lakes,4
+32,Yirol East,Lakes,4
+33,Yirol West,Lakes,4
+34,Aweil Centre,Northern Bahr el Ghazal,5
+35,Aweil East,Northern Bahr el Ghazal,5
+36,Aweil North,Northern Bahr el Ghazal,5
+37,Aweil South,Northern Bahr el Ghazal,5
+38,Aweil West,Northern Bahr el Ghazal,5
+39,Abiemnhom,Unity,5
+40,Guit,Unity,5
+41,Koch,Unity,5
+42,Leer,Unity,5
+43,Mayendit,Unity,5
+44,Mayom,Unity,5
+45,Panyijiar,Unity,5
+46,Pariang,Unity,5
+47,Rubkona,Unity,6
+48,Baliet,Upper Nile,7
+49,Fashoda,Upper Nile,7
+50,Longochuk,Upper Nile,7
+51,Luakpiny/Nasir,Upper Nile,7
+52,Maban,Upper Nile,7
+53,Maiwut,Upper Nile,7
+54,Malakal,Upper Nile,7
+55,Manyo,Upper Nile,7
+56,Melut,Upper Nile,7
+57,Panyikang,Upper Nile,7
+58,Renk,Upper Nile,7
+59,Ulang,Upper Nile,7
+60,Gogrial East,Warrap,7
+61,Gogrial West,Warrap,8
+62,Tonj East,Warrap,8
+63,Tonj North,Warrap,8
+64,Tonj South,Warrap,8
+65,Twic,Warrap,8
+66,Abyei Region,Abyei Region,0
+67,Jur River,Western Bahr el Ghazal,9
+68,Raja,Western Bahr el Ghazal,9
+69,Wau,Western Bahr el Ghazal,9
+70,Ezo,Western Equatoria,10
+71,Ibba,Western Equatoria,10
+72,Maridi,Western Equatoria,10
+73,Mundri East,Western Equatoria,10
+74,Mundri West,Western Equatoria,10
+75,Mvolo,Western Equatoria,10
+76,Nagero,Western Equatoria,10
+77,Nzara,Western Equatoria,10
+78,Tambura,Western Equatoria,10
+79,Yambio,Western Equatoria,10

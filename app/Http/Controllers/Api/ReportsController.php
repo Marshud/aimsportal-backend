@@ -11,6 +11,7 @@ use App\Models\OrganisationCategory;
 use App\Models\Project;
 use App\Models\ProjectHumanitarianScope;
 use App\Models\ProjectTransaction;
+use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -98,7 +99,7 @@ class ReportsController extends Controller
             ->selectRaw('project_sectors.code as sector, project_sectors.vocabulary as vocabulary, sum(value_amount) as data')
             ->where('project_transactions.value_currency', $currency)
             ->groupBy('sector', 'vocabulary')
-            ->orderBy('data', 'desc')
+          //  ->orderBy('data', 'desc')
             //->limit($no_of_years)
             ->get();
         $filtered = $report->map(function ($item) {
@@ -131,12 +132,45 @@ class ReportsController extends Controller
             ->selectRaw('project_transaction_provider_org.organisation_id as organisation, sum(value_amount) as data')
             ->where('project_transactions.value_currency', $currency)
             ->groupBy('organisation')
-            ->orderBy('data', 'desc')
+           // ->orderBy('data', 'desc')
             //->limit($no_of_years)
             ->get();
         $filtered = $report->map(function ($item) {
             return [
                 'organisation' => Organisation::find($item->organisation)->name ?? 'unknown',
+                'data' => $item->data
+            ];
+        });
+        return $filtered;
+        
+    }
+
+    public function reportOnFundingByState(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'currency' => 'nullable|string',
+            'number_of_years' => 'nullable|numeric'
+
+        ]); 
+        $currency = $request->currency ?? 'USD';
+        $no_of_years = $request->number_of_years ?? 12;
+        if ($validator->fails()) {
+                
+            return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
+        }
+
+       $report = DB::table('projects')
+            ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
+            ->join('project_locations', 'projects.id', '=', 'project_locations.project_id')
+            ->selectRaw('project_locations.state_id as state, sum(value_amount) as data')
+            ->where('project_transactions.value_currency', $currency)
+            ->groupBy('state')
+           // ->orderBy('data', 'desc')
+            //->limit($no_of_years)
+            ->get();
+        $filtered = $report->map(function ($item) {
+            return [
+                'state' => State::find($item->state)->name ?? 'none',
                 'data' => $item->data
             ];
         });
@@ -272,6 +306,7 @@ class ReportsController extends Controller
        return iati_get_code_value('Sector', $code)->name ?? 'unknown';
     }
 
+    
  
 
 }
