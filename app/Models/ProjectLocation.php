@@ -15,4 +15,19 @@ class ProjectLocation extends Model
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'state_id');
+    }
+
+    public function county()
+    {
+        return $this->belongsTo(County::class, 'county_id');
+    }
+
+    public function payam()
+    {
+        return $this->belongsTo(Payam::class, 'payam_id');
+    }
 }

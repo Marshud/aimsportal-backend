@@ -11,6 +11,7 @@ use App\Models\OrganisationCategory;
 use App\Models\Project;
 use App\Models\ProjectBudget;
 use App\Models\ProjectHumanitarianScope;
+use App\Models\ProjectLocation;
 use App\Models\ProjectParticipatingOrg;
 use App\Models\ProjectRecipientRegion;
 use App\Models\ProjectSector;
@@ -49,7 +50,8 @@ class ProjectsController extends Controller
             'project_actual_end_date' => 'nullable|date',
             'organisation_id' => 'required|exists:organisations,id',
             'activity_scope' => 'nullable|numeric',
-            'activity_status' => 'required|numeric'
+            'activity_status' => 'required|numeric',
+            'locations' => 'nullable|array',
             //'is_iati_project' => 'boolean',
 
         ],[
@@ -246,7 +248,7 @@ class ProjectsController extends Controller
                 $transactions = $request->transactions;
                 foreach ($transactions as $transaction) {
                     $thisTransaction = $project->transactions()->create([
-                        "ref" => $transaction['ref'],
+                        "ref" => $transaction['ref'] ?? '',
                         "humanitarian" => $transaction['humanitratian'] ?? 0,
                         "transaction_type_code" => $transaction['transaction_type_code'],
                         "transaction_date" => $transaction['transaction_date'],
@@ -333,6 +335,17 @@ class ProjectsController extends Controller
                     }
                 }
 
+                $locations = $request->locations;
+                foreach($locations as $location) {
+                    $ref = isset($location['state']) ? 'state-id:'.$location['state'] : null;
+                    $project->locations()->create([
+                        'state_id' => $location['state'] ?? null,
+                        'county_id' => $location['county'] ?? null,
+                        'payam_id' => $location['payam'] ?? null,
+                        'ref' => $ref,
+                    ]);
+                }
+
                 
                 
 
@@ -369,7 +382,8 @@ class ProjectsController extends Controller
             'project_actual_end_date' => 'nullable|date',
             'organisation_id' => 'required|exists:organisations,id',
             'activity_scope' => 'nullable|numeric',
-            'activity_status' => 'required|numeric'
+            'activity_status' => 'required|numeric',
+            'locations' => 'nullable|array'
             //'is_iati_project' => 'boolean',
 
         ]);
@@ -563,7 +577,7 @@ class ProjectsController extends Controller
                 $transactions = $request->transactions;
                 foreach ($transactions as $transaction) {
                     $thisTransaction = $project->transactions()->updateOrCreate([
-                        "ref" => $transaction['ref'],
+                        "ref" => $transaction['ref'] ?? '',
                         "humanitarian" => $transaction['humanitratian'] ?? 0,
                         "transaction_type_code" => $transaction['transaction_type_code'],
                         "transaction_date" => $transaction['transaction_date'],
@@ -646,6 +660,17 @@ class ProjectsController extends Controller
                         }
                         
                     }
+                }
+
+                $locations = $request->locations;
+                foreach($locations as $location) {
+                    $ref = isset($location['state']) ? 'state-id:'.$location['state'] : null;
+                    $project->locations()->updateOrCreate([
+                        'state_id' => $location['state'] ?? null,
+                        'county_id' => $location['county'] ?? null,
+                        'payam_id' => $location['payam'] ?? null,
+                        'ref' => $ref,
+                    ]);
                 }
                 
 
@@ -785,6 +810,24 @@ class ProjectsController extends Controller
         $project_transaction->provider_org()->delete();
         $project_transaction->receiver_org()->delete();
         $project_transaction->delete();
+
+        return response()->success(__('messages.success_deleted'));
+    }
+
+    public function deleteLocation(Request $request, $id)
+    {
+        if (!$request->user()->isAbleTo('delete-projects'))
+        {
+            return response()->error('Unauthorized', 403); 
+        }
+
+        $project_location = ProjectLocation::find($id);
+        if (!$project_location)
+        {
+            return response()->error(__('messages.not_found'), 404);
+        }
+
+        $project_location->delete();
 
         return response()->success(__('messages.success_deleted'));
     }

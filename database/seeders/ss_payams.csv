@@ -1,0 +1,513 @@
+id,name,county_name
+1,Bungu,Juba
+2,Dolo,Juba
+3,Ganji,Juba
+4,Gondokoro,Juba
+5,Juba Town,Juba
+6,Kator,Juba
+7,Lirya,Juba
+8,Lokiliri,Juba
+9,Lobonok,Juba
+10,Mangala South,Juba
+11,Munuki,Juba
+12,Northern Bari,Juba
+13,Rejaf,Juba
+14,Rokon,Juba
+15,Tijor,Juba
+16,Wonduruba,Juba
+17,Mangala North,Juba
+18,Kangapo I,Kajo-keji
+19,Kangapo II,Kajo-keji
+20,Lire,Kajo-keji
+21,Liwolo,Kajo-keji
+22,Nyepo,Kajo-keji
+23,Kenyi,Lainya
+24,Kupera,Lainya
+25,Lainya,Lainya
+26,Mukaya,Lainya
+27,Wuji,Lainya
+28,Gulumbi,Morobo
+29,Kimba,Morobo
+30,Lujulo,Morobo
+31,Panyume,Morobo
+32,Wudabi,Morobo
+33,Gameiza,Terekeka
+34,Muni,Terekeka
+35,Nyori,Terekeka
+36,Reggo,Terekeka
+37,Rijong,Terekeka
+38,Tali,Terekeka
+39,Terekeka,Terekeka
+40,Tindilo,Terekeka
+41,Tombek,Terekeka
+42,Lasu,Yei
+43,Mugwo,Yei
+44,Otogo,Yei
+45,Tore,Yei
+46,Yei,Yei
+47,Kimotong,Budi
+48,Komori,Budi
+49,Nauro,Budi
+50,Loriyok,Budi
+51,Lotukei,Budi
+52,Loudo,Budi
+53,Nagishot,Budi
+54,Napak,Budi
+55,Hatire,Ikotos
+56,Ikotos,Ikotos
+57,Imotong,Ikotos
+58,Lomohidang North,Ikotos
+59,Lomohidang South,Ikotos
+60,Losite,Ikotos
+61,Jie,Kapoeta East
+62,Katodori,Kapoeta East
+63,Kauto,Kapoeta East
+64,Lotimor,Kapoeta East
+65,Mogos,Kapoeta East
+66,Narus,Kapoeta East
+67,Natinga,Kapoeta East
+68,Chumakori,Kapoeta North
+69,Karukomuge,Kapoeta North
+70,Lomeyen,Kapoeta North
+71,Mosingo,Kapoeta North
+72,Najie,Kapoeta North
+73,Paringa,Kapoeta North
+74,Kapoeta Town,Kapoeta South
+75,Longeleya,Kapoeta South
+76,Machi One,Kapoeta South
+77,Machi Two,Kapoeta South
+78,Pwata,Kapoeta South
+79,Arihilo,Lafon
+80,Burgilo,Lafon
+81,Imehejek,Lafon
+82,Kurumi,Lafon
+83,Lohutok,Lafon
+84,Longiro,Lafon
+85,Marguna,Lafon
+86,Pachidi,Lafon
+87,Lobone,Magwi
+88,Magwi,Magwi
+89,Mugali,Magwi
+90,Nimule,Magwi
+91,Pageri,Magwi
+92,Pajok,Magwi
+93,Bur,Torit
+94,Hiyala,Torit
+95,Himodonge,Torit
+96,Ifwotu,Torit
+97,Imurok,Torit
+98,Kudo,Torit
+99,Torit,Torit
+100,Alali,Akobo
+101,Barmach,Akobo
+102,Bilkey,Akobo
+103,Buong,Akobo
+104,Dengjok,Akobo
+105,Diror,Akobo
+106,Nyandit,Akobo
+107,Walgak,Akobo
+108,Ayod,Ayod
+109,Kurwai,Ayod
+110,Kuach-deng,Ayod
+111,Mogok,Ayod
+112,Pagil,Ayod
+113,Pajiek,Ayod
+114,Wau,Ayod
+115,Anyidi,Bor South
+116,Baidit,Bor South
+117,Bor,Bor South
+118,Jalle,Bor South
+119,Kolnyang,Bor South
+120,Makuach,Bor South
+121,Alam,Canal/Pigi
+122,Atar,Canal/Pigi
+123,Belewach,Canal/Pigi
+124,Kaldak,Canal/Pigi
+125,Korwach,Canal/Pigi
+126,Mareng,Canal/Pigi
+127,Nyainthokmalual,Canal/Pigi
+128,Wunlem,Canal/Pigi
+129,Ageer,Duk
+130,Dongchak,Duk
+131,Padiet,Duk
+132,Payuel,Duk
+133,Pagak,Duk
+134,Panyang,Duk
+135,Manajang,Fangak
+136,Mareang,Fangak
+137,Old Fangak,Fangak
+138,Paguir,Fangak
+139,Phom,Fangak
+140,Chuil,Nyirol
+141,Nyambor,Nyirol
+142,Pading,Nyirol
+143,Pulturuk,Nyirol
+144,Thol,Nyirol
+145,Waat,Nyirol
+146,Boma,Pibor
+147,Gumuruk,Pibor
+148,Kiziongora,Pibor
+149,Lekuangole,Pibor
+150,Marow,Pibor
+151,Mewun,Pibor
+152,Pibor,Pibor
+153,Verteth,Pibor
+154,Adongo,Pochalla
+155,Akiela,Pochalla
+156,Burator,Pochalla
+157,Omiela,Pochalla
+158,Pochalla,Pochalla
+159,Ajuong,Twic East
+160,Kongor,Twic East
+161,Lith,Twic East
+162,Nyuak,Twic East
+163,Pakeer,Twic East
+164,Karam,Uror
+165,Motot,Uror
+166,Pathai,Uror
+167,Payai,Uror
+168,Pieri,Uror
+169,Puolchuol,Uror
+170,Tiam,Uror
+171,Uror,Uror
+172,Abuyong,Awerial
+173,Alel II,Awerial
+174,Bun-agok,Awerial
+175,Dor,Awerial
+176,Magok,Awerial
+177,Nile,Awerial
+178,Puluk,Awerial
+179,Alel I,Awerial
+180,Abiriu,Cueibet
+181,Citcok,Cueibet
+182,Duony,Cueibet
+183,Malou Pec,Cueibet
+184,Ngap,Cueibet
+185,Pagor,Cueibet
+186,Ngap 1,Cueibet
+187,Amongpiny,Rumbek Centre
+188,Jiir,Rumbek Centre
+189,Malek 2,Rumbek Centre
+190,Matangai,Rumbek Centre
+191,Mayom,Rumbek Centre
+192,Aduel,Rumbek East
+193,Akot,Rumbek East
+194,Atiaba,Rumbek East
+195,Cueicok,Rumbek East
+196,Maleng-agok,Rumbek East
+197,Pacong,Rumbek East
+198,Paloc,Rumbek East
+199,Aloor,Rumbek North
+200,Madol,Rumbek North
+201,Malueeth,Rumbek North
+202,Maper,Rumbek North
+203,Mayen,Rumbek North
+204,Wun-rieng,Rumbek North
+205,Bargel,Wulu
+206,Domoloto,Wulu
+207,Makundi,Wulu
+208,Wulu,Wulu
+209,Adior,Yirol East
+210,Lekakedu,Yirol East
+211,Malek,Yirol East
+212,Pagarau,Yirol East
+213,Tinagau,Yirol East
+214,Yali,Yirol East
+215,Abang,Yirol West
+216,Aluakluak,Yirol West
+217,Anuol,Yirol West
+218,Geng-geng,Yirol West
+219,Gher,Yirol West
+220,Mapuordit,Yirol West
+221,Yirol,Yirol West
+222,Abul,Aweil Centre
+223,Achana,Aweil Centre
+224,Aroyo,Aweil Centre
+225,Awiil,Aweil Centre
+226,Bahr Mayen,Aweil Centre
+227,Chel South,Aweil Centre
+228,Nyalath,Aweil Centre
+229,Baach,Aweil East
+230,Madhol,Aweil East
+231,Malual-bai,Aweil East
+232,Mangar-tong I,Aweil East
+233,Mangok,Aweil East
+234,Wunlang,Aweil East
+235,Yargot,Aweil East
+236,Mayom-wel,Aweil East
+237,Ariath,Aweil North
+238,Malual Centre,Aweil North
+239,Malual East,Aweil North
+240,Malual North,Aweil North
+241,Malual West,Aweil North
+242,Ayai,Aweil South
+243,Gakrol,Aweil South
+244,Nyieth,Aweil South
+245,Nyocawany I,Aweil South
+246,Nyocawany II,Aweil South
+247,Panthou,Aweil South
+248,Tar-weng,Aweil South
+249,Tiar-aleit,Aweil South
+250,Wathmuok,Aweil South
+251,Achana 2,Aweil West
+252,Aweil Town,Aweil West
+253,Ayat Centre,Aweil West
+254,Ayat East,Aweil West
+255,Ayat West,Aweil West
+256,Gomjuer Centre,Aweil West
+257,Gomjuer East,Aweil West
+258,Gomjuer West,Aweil West
+259,Mariem East,Aweil West
+260,Mariem West,Aweil West
+261,Abiemnhom,Abiemnhom
+262,Aworpiny,Abiemnhom
+263,Manjonga,Abiemnhom
+264,Panyang 2,Abiemnhom
+265,Guit,Guit
+266,Kedad,Guit
+267,Kuach,Guit
+268,Kuerguini,Guit
+269,Niemni,Guit
+270,Nyathoar,Guit
+271,Wathnyona,Guit
+272,Boaw,Koch
+273,Gany,Koch
+274,Jaak,Koch
+275,Kuachlual,Koch
+276,Ngony,Koch
+277,Norbor,Koch
+278,Pakur,Koch
+279,Padeah,Leer
+280,Adok,Leer
+281,Bou,Leer
+282,Guat,Leer
+283,Juong Kang,Leer
+284,Leer,Leer
+285,Pilieny,Leer
+286,Yang,Leer
+287,Pabuong,Mayendit
+288,Bor 2,Mayendit
+289,Dablual,Mayendit
+290,Luom,Mayendit
+291,Maal,Mayendit
+292,Rubkuay,Mayendit
+293,Thaker,Mayendit
+294,Tharjiath,Mayendit
+295,Tutnyang,Mayendit
+296,Bieh,Mayom
+297,Kuerbuone,Mayom
+298,Kueryiek,Mayom
+299,Mankien,Mayom
+300,Ngop 2,Mayom
+301,Pup,Mayom
+302,Riak,Mayom
+303,Ruathnyibuol,Mayom
+304,Wangbuor II,Mayom
+305,Wangbuor I,Mayom
+306,Wangbuor III,Mayom
+307,Wangkei,Mayom
+308,Ganyliel,Panyijiar
+309,Kol,Panyijiar
+310,Mayom 2,Panyijiar
+311,Nyal,Panyijiar
+312,Pachak,Panyijiar
+313,Pachaar,Panyijiar
+314,Pachienjok,Panyijiar
+315,Panyijiar,Panyijiar
+316,Thoarnhoum,Panyijiar
+317,Tiap,Panyijiar
+318,Aliiny,Pariang
+319,Biu,Pariang
+320,Jamjang,Pariang
+321,Nyeel,Pariang
+322,Pariang,Pariang
+323,Werthen,Pariang
+324,Wunkur,Pariang
+325,Bentiu Town,Rubkona
+326,Budaang,Rubkona
+327,Dhorbor,Rubkona
+328,Kaljak,Rubkona
+329,Ngop,Rubkona
+330,Nhialdiu,Rubkona
+331,Panhiany,Rubkona
+332,Rubkotne,Rubkona
+333,Wathjaak,Rubkona
+334,Abwong,Baliet
+335,Adong,Baliet
+336,Akoka,Baliet
+337,Akotweng,Baliet
+338,Gel Achiel,Baliet
+339,Nyongkuach,Baliet
+340,Nyongrial,Baliet
+341,Rom,Baliet
+342,Wunthow,Baliet
+343,Dethok,Fashoda
+344,Kodok,Fashoda
+345,Kodok Town,Fashoda
+346,Lul,Fashoda
+347,Dajo,Longochuk
+348,Guelguk,Longochuk
+349,Longochuk,Longochuk
+350,Malual,Longochuk
+351,Pamach,Longochuk
+352,Wudier,Longochuk
+353,Dingkar,Luakpiny/Nasir
+354,Jikmir,Luakpiny/Nasir
+355,Kiech Kuon,Luakpiny/Nasir
+356,Kuerenge-Ke,Luakpiny/Nasir
+357,Mading,Luakpiny/Nasir
+358,Maker,Luakpiny/Nasir
+359,Nasir,Luakpiny/Nasir
+360,Roam,Luakpiny/Nasir
+361,Banashowa,Maban
+362,Boung,Maban
+363,Jinkuata,Maban
+364,Jinmakda,Maban
+365,Khor El Amer,Maban
+366,Jekow,Maiwut
+367,Jotoma,Maiwut
+368,Kigila,Maiwut
+369,Maiwut,Maiwut
+370,Olang,Maiwut
+371,Lelo,Malakal
+372,Central Malakal,Malakal
+373,Eastern Malakal,Malakal
+374,Northern Malakal,Malakal
+375,Southern Malakal,Malakal
+376,Ogot,Malakal
+377,Adhidwoi,Manyo
+378,Kaka,Manyo
+379,Magenist,Manyo
+380,Wedakona,Manyo
+381,Bimachuk,Melut
+382,Galdora,Melut
+383,Melut,Melut
+384,Panomdit,Melut
+385,Paloch,Melut
+386,Wunamum,Melut
+387,Dheteim,Panyikang
+388,Kuel,Panyikang
+389,Pakang,Panyikang
+390,Panyidwoi,Panyikang
+391,Panyikang,Panyikang
+392,Tonga,Panyikang
+393,Anakdiar,Panyikang
+394,Geger,Renk
+395,Jalhak,Renk
+396,North Renk,Renk
+397,Chemmedi,Renk
+398,South Renk,Renk
+399,Doma,Ulang
+400,Kurmuot,Ulang
+401,Ulang,Ulang
+402,Yomding,Ulang
+403,Nyang,Gogrial East
+404,Pathuon East,Gogrial East
+405,Pathuon West,Gogrial East
+406,Toch East,Gogrial East
+407,Toch North,Gogrial East
+408,Toch West,Gogrial East
+409,Akon South,Gogrial West
+410,Akon North,Gogrial West
+411,Alek North,Gogrial West
+412,Alek South,Gogrial West
+413,Alek West,Gogrial West
+414,Gogrial,Gogrial West
+415,Kuac North,Gogrial West
+416,Kuac South,Gogrial West
+417,Riau,Gogrial West
+418,Ananatak,Tonj East
+419,Makuac,Tonj East
+420,Malualcum,Tonj East
+421,Maparah,Tonj East
+422,Mayen 2,Tonj East
+423,Pagor 2,Tonj East
+424,Palal,Tonj East
+425,Paliang,Tonj East
+426,Pannhial,Tonj East
+427,Paweng,Tonj East
+428,Wun-liit,Tonj East
+429,Akop,Tonj North
+430,Alabek,Tonj North
+431,Aliek,Tonj North
+432,Awuul,Tonj North
+433,Kirik,Tonj North
+434,Manloor,Tonj North
+435,Marial-lou,Tonj North
+436,Pagol,Tonj North
+437,Rual-bet,Tonj North
+438,Warrap,Tonj North
+439,Jak,Tonj South
+440,Manyang-ngok,Tonj South
+441,Thiet,Tonj South
+442,Tonj,Tonj South
+443,Wath-alel,Tonj South
+444,Ajak-kuac,Twic
+445,Akoc,Twic
+446,Aweeng,Twic
+447,Pannyok,Twic
+448,Turalei,Twic
+449,Wunrok,Twic
+450,Kangi,Jur River
+451,Kuajiena,Jur River
+452,Marial Bai,Jur River
+453,Rocrocdong,Jur River
+454,Udici,Jur River
+455,Wau Bai,Jur River
+456,Ere,Raja
+457,Raga,Raja
+458,Ringi,Raja
+459,Uyujuku,Raja
+460,Bagari,Wau
+461,Besselia,Wau
+462,Kpaile,Wau
+463,Wau North,Wau
+464,Wau South,Wau
+465,Andari,Ezo
+466,Bagidi,Ezo
+467,Bariguna,Ezo
+468,Ezo Centre,Ezo
+469,Naandi,Ezo
+470,Yangiri,Ezo
+471,Ibba Centre,Ibba
+472,Madebe,Ibba
+473,Manikakara,Ibba
+474,Maruko,Ibba
+475,Nabanga,Ibba
+476,Kozi,Maridi
+477,Landili,Maridi
+478,Mambe,Maridi
+479,Maridi,Maridi
+480,Ngamunde,Maridi
+481,Kediba,Mundri East
+482,Lakamadi,Mundri East
+483,Lozoh,Mundri East
+484,Minga,Mundri East
+485,Witto,Mundri East
+486,Amadi,Mundri West
+487,Bangolo,Mundri West
+488,Kotobi,Mundri West
+489,Mundri,Mundri West
+490,Bahr El Grindi,Mvolo
+491,Bagori,Mvolo
+492,Dari,Mvolo
+493,Kokori,Mvolo
+494,Lessi,Mvolo
+495,Mvolo,Mvolo
+496,Yeri,Mvolo
+497,Nagero,Nagero
+498,Basukangbi,Nzara
+499,Nzara Centre,Nzara
+500,Ringasi,Nzara
+501,Sakure,Nzara
+502,Sangua,Nzara
+503,Mupoi,Tambura
+504,Namutina,Tambura
+505,Source Yubu,Tambura
+506,Tambura,Tambura
+507,Bangasu,Yambio
+508,Gangura,Yambio
+509,Nadiangere,Yambio
+510,Ri-rangu,Yambio
+511,Yambio Town,Yambio
+512,Abyei Region,Abyei Region

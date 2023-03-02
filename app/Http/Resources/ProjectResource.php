@@ -50,6 +50,7 @@ class ProjectResource extends JsonResource
             'budget' => ProjectBudgetResource::collection($this->budgets),
             'planned_disbursement' => ProjectPlannedDisbursementResource::collection($this->planned_disbursements),
             'transaction' => ProjectTransactionResource::collection($this->transactions),
+            'location' => ProjectLocationResource::collection($this->locations),
         ];
     }
 

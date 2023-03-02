@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CurrencyConvertController;
 use App\Http\Controllers\Api\CustomFieldsController;
 use App\Http\Controllers\Api\IatiHelperController;
 use App\Http\Controllers\Api\LanguagesController;
+use App\Http\Controllers\Api\LocationsController;
 use App\Http\Controllers\Api\OrganisationCategoryController;
 use App\Http\Controllers\Api\OrganisationController;
 use App\Http\Controllers\Api\ProjectsController;
@@ -68,6 +69,7 @@ Route::group(['prefix' => 'projects', 'as' => 'projects.'], function() {
     Route::delete('/sector/{id}', [ProjectsController::class, 'deleteProjectSector']);
     Route::delete('/recipient-region/{id}', [ProjectsController::class, 'deleteRecipientRegion']);
     Route::delete('/transaction/{id}', [ProjectsController::class, 'deleteTransaction']);
+    Route::delete('/location/{id}', [ProjectsController::class, 'deleteLocation']);
 });
 
 Route::group(['prefix' => 'general', 'as' => 'general.'], function() {
@@ -88,6 +90,7 @@ Route::group(['prefix' => 'general', 'as' => 'general.'], function() {
 Route::group(['prefix' => 'reports', 'as' => 'reports.'], function() {
     Route::any('funding-trend', [ReportsController::class, 'reportOnFundingTrends']);
     Route::any('funding-by-sector', [ReportsController::class, 'reportOnFundingBySector']);
+    Route::any('funding-by-state', [ReportsController::class, 'reportOnFundingByState']);
     Route::any('funding-by-source', [ReportsController::class, 'reportOnFundingBySource']);
     Route::any('total-projects-trend', [ReportsController::class, 'reportOnTotalProjectstrends']);
     Route::any('total-projects-inprogress-trend', [ReportsController::class, 'reportOnTotalProjectsInprogresstrends']);
@@ -100,4 +103,10 @@ Route::group(['prefix' => 'reports', 'as' => 'reports.'], function() {
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
     Route::get('system-settings', [SystemSettingsController::class, 'getSystemSettings']);
     Route::post('system-settings', [SystemSettingsController::class, 'storeSystemSettings']);
+});
+
+Route::group(['prefix' => 'locations', 'as' => 'locations.'], function() {
+    Route::any('get-states', [LocationsController::class, 'getStates']);
+    Route::any('get-counties', [LocationsController::class, 'searchCounty']);
+    Route::any('get-payams', [LocationsController::class, 'searchPayam']);
 });
