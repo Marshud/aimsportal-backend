@@ -346,9 +346,9 @@ class ReportsController extends Controller
     private  function convertToInternationalCurrencySystem ($value) 
     {
 
-        if (abs($value) >= 1.0e+9) return round((abs($value) / 1.0e+9), 2) . "B";
-        if (abs($value) >= 1.0e+6) return round((abs($value) / 1.0e+6), 2). "M";
-        if (abs($value) >= 1.0e+3) return round((abs($value) / 1.0e+3), 2). "K";
+        if (abs($value) >= 1.0e+9) return round((abs($value) / 1.0e+9), 1) . "B";
+        if (abs($value) >= 1.0e+6) return round((abs($value) / 1.0e+6), 1). "M";
+        if (abs($value) >= 1.0e+3) return round((abs($value) / 1.0e+3), 1). "K";
         return abs($value);
 
     }
