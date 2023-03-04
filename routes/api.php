@@ -97,6 +97,7 @@ Route::group(['prefix' => 'reports', 'as' => 'reports.'], function() {
     Route::any('total-projects-completed-trend', [ReportsController::class, 'reportOnTotalProjectsCompletedtrends']);
     Route::any('funding-total', [ReportsController::class, 'reportOnTotalFunding']);
     Route::any('budgets-trend', [ReportsController::class, 'reportOnBudgetingTrends']);
+    Route::any('summary-per-state', [ReportsController::class, 'reportSummaryPerState']);
 
 });
 
