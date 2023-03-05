@@ -26,7 +26,7 @@ class ProjectsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum','isapproved'])->except('index');
+        $this->middleware(['auth:sanctum','isapproved'])->except(['index', 'show']);
     }
 
     public function store(Request $request)
@@ -686,10 +686,10 @@ class ProjectsController extends Controller
 
     public function show(Request $request, $id)
     {
-        if (!$request->user()->isAbleTo('view-projects'))
-        {
-            return response()->error('Unauthorized', 403); 
-        }
+        // if (!$request->user()->isAbleTo('view-projects'))
+        // {
+        //     return response()->error('Unauthorized', 403); 
+        // }
         $project = Project::find($id);
         if (!$project) {
             return response()->error(__('messages.not_found'), 404);
