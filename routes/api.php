@@ -61,6 +61,7 @@ Route::group(['prefix' => 'custom-fields', 'as' => 'custom.fields.'], function()
 Route::group(['prefix' => 'projects', 'as' => 'projects.'], function() {
     Route::get('/', [ProjectsController::class, 'index']);
     Route::post('/', [ProjectsController::class, 'store']);
+    Route::post('/search', [ProjectsController::class, 'index']);
     Route::put('/{id}', [ProjectsController::class, 'update']);
     Route::get('/{id}', [ProjectsController::class, 'show']);
     Route::delete('/{id}', [ProjectsController::class, 'destroy']);

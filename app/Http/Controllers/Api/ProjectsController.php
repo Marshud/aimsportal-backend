@@ -700,8 +700,68 @@ class ProjectsController extends Controller
 
     public function index(Request $request)
     {
-       // $project = Project::first();
-        return response()->success(ProjectResource::collection(Project::paginate(20)));
+       
+       $builder = Project::query();
+       $builder->where(function ($q) {
+            if (request()->has('organisation') && request()->filled('organisation')) {
+                $q->whereHas('participating_organisations', function ($q) {
+                    $q->where('organisation_id', request()->get('organisation'));
+                });
+            }
+
+            if (request()->has('title') && request()->filled('title')) {
+                $q->where('title', 'like', '%' . request()->get('title') . '%');
+            }
+            
+            if (request()->has('state') && request()->filled('state')) {
+                $q->whereHas('locations', function ($q) {
+                    if(request()->filled('payam')) {
+                        $q->where('payam_id', request()->get('payam'));
+                    }
+
+                    else if(request()->filled('county')) {
+                        $q->where('county_id', request()->get('county'));
+                    }
+
+                    else {
+                        $q->where('state_id', request()->get('state'));
+                    }
+                    
+                });
+            }
+
+            if (request()->has('parent_sector') && request()->filled('parent_sector')) {
+                $q->whereHas('sectors', function ($q) {
+                    if(request()->filled('sector')) {
+                        $q->where('vocabulary', request()->get('parent_sector'))
+                            ->where('code', request()->get('sector'));
+                    }
+                    
+
+                    else {
+                        $q->where('vocabulary', request()->get('parent_sector'));
+                    }
+                    
+                });
+            }
+            if (request()->has('start_date') && request()->filled('start_date')) {
+                $q->whereHas('activity_dates', function ($q) {
+                    if(request()->filled('end_date')) {
+                        $q->whereBetween('iso_date', [request()->get('start_date'), request()->get('end_date')]);
+                    }
+
+                    else {
+                        $q->where('iso_date', '>=', request()->get('start_date'))
+                            ->where('type', 1);
+                    }
+                    
+                });
+            }
+        });
+
+    
+
+        return ProjectResource::collection($builder->paginate(20));
     }
 
     public function destroy(Request $request, $id)
