@@ -325,6 +325,24 @@ class ReportsController extends Controller
         
     }
 
+    public function reportOrganisationCount()
+    {
+        // get organisations interested in
+        $organisationsOfInterest = ['Government', 'National', 'International'];
+        $builder = Organisation::query();
+        $result = collect();
+        foreach($organisationsOfInterest as $organisation) {
+           $count = $builder->whereHas('category', function($q) use($organisation) {
+                $q->where('name', 'like', '%' . $organisation . '%');
+            })->count();
+            $result->push(['category' => $organisation, 'count' => $count]);
+        }
+        $result->push(['category' => 'All', 'count' => Organisation::count()]);
+
+        return $result;
+
+    }
+
     private function getSectorCode($vocabulary, $code)
     {
         $sectorVocabulary = iati_get_code_value('SectorVocabulary', $vocabulary);
