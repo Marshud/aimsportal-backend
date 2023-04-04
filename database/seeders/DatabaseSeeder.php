@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
        $this->call(DemoDataSeeder::class);
        $this->call(LanguagesSeeder::class);
        $this->call(LocationSeeder::class);
+       $this->call(IatiPublishersSeeder::class);
     }
 }
