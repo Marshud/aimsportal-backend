@@ -329,6 +329,7 @@ class ReportsController extends Controller
     {
         // get organisations interested in
         $organisationsOfInterest = ['Government', 'National', 'International'];
+        
         $builder = Organisation::query();
         $result = collect();
         foreach($organisationsOfInterest as $organisation) {

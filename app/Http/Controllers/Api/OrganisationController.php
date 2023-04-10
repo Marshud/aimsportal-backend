@@ -25,13 +25,14 @@ class OrganisationController extends Controller
         // }
         $validator = Validator::make($request->all(),[
             'name' => 'required|unique:organisations',
-            'acronym' => 'required|string|max:8',
+            'acronym' => 'required|string|max:12',
             'contact_person_name' => 'required|string|max:200',
             'contact_person_email' => 'required|email|max:200',
             'category_id' => 'required|exists:organisation_categories,id',
             'approved' => 'nullable|boolean',
             'address' => 'required',
-            'description' => 'nullable|max:200'
+            'description' => 'nullable|max:200',
+            'iati_org_type' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -50,6 +51,9 @@ class OrganisationController extends Controller
         $organisation->contact_person_phone = $request->contact_person_phone ?? null;
         $organisation->approved = $request->approved ?? false;
         $organisation->description = $request->description ?? null;
+        $organisation->country = $request->country ?? 'SS';
+        $organisation->iati_org_id = $request->iati_org_id ?? null;
+        $organisation->iati_org_type = $request->iati_org_type;
         $organisation->save();
 
         return response()->success(new OrganisationResource($organisation));
@@ -86,12 +90,13 @@ class OrganisationController extends Controller
 
         $validator = Validator::make($request->all(),[
             'name' => "required|unique:organisations,name,$id",
-            'acronym' => 'required|string|max:8',
+            'acronym' => 'required|string|max:12',
             'contact_person_name' => 'required|string|max:200',
             'contact_person_email' => 'required|email|max:200',
             'category_id' => 'required|exists:organisation_categories,id',
             'approved' => 'required|boolean',
-            'description' => 'nullable|max:200'
+            'description' => 'nullable|max:200',
+            'iati_org_type' => 'required',
         ]);
         
         if ($validator->fails()) {
@@ -108,7 +113,9 @@ class OrganisationController extends Controller
         $organisation->address = $request->address;
         $organisation->approved = $request->approved;
         $organisation->description = $request->description ?? null;
+        $organisation->country = $request->country ?? 'SS';
         $organisation->iati_org_id = $request->iati_org_id ?? null;
+        $organisation->iati_org_type = $request->iati_org_type;
         $organisation->save();
 
         return response()->success(new OrganisationResource($organisation));

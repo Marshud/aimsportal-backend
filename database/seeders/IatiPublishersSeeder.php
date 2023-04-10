@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Country;
 use App\Models\Organisation;
 use App\Models\OrganisationCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -23,7 +24,7 @@ class IatiPublishersSeeder extends Seeder
         {
             
             try {
-                Organisation::firstOrCreate(
+                Organisation::updateOrCreate(
                     [
                         'iati_org_id' => $publisher['iati_organisation_identifier'],                        
                     ],
@@ -37,6 +38,7 @@ class IatiPublishersSeeder extends Seeder
                         'contact_person_email' => 'support@email.com',
                         'address' => $publisher['country'],
                         'approved' => 1,
+                        'country' => Country::tryFrom($publisher['country'])->name ??  null
                     ]
                 );
             } catch(\Exception $e) {
@@ -74,8 +76,9 @@ class IatiPublishersSeeder extends Seeder
 
     private function getOrganisationCategory($name)
     {
+        $internationalCategory = OrganisationCategory::where('name', 'International');
         $category = OrganisationCategory::where('name', 'like', '%' . $name . '%')->first(); 
         
-        return (!$category) ? OrganisationCategory::first()->getKey() : $category->getKey();
+        return (!$category) ? $internationalCategory->getKey() : $category->getKey();
     }
 }
