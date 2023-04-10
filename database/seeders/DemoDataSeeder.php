@@ -24,7 +24,7 @@ class DemoDataSeeder extends Seeder
         $org1 = Organisation::firstOrCreate(['name' => 'Olive International'],
         ['display_name' => 'Olive Internationa', 'acronym' => 'OLIVE',
         'description' => 'all purpose company', 'category_id' => $cat2->id, 'contact_person_name' => 'Christo',
-        'contact_person_email' => 'admin@olive-int.com', 'address' => 'Juba', 'approved' => true]);
+        'contact_person_email' => 'admin@olive-int.com', 'address' => 'Juba', 'approved' => true, 'country' => 'SS']);
 
         VerifiedApplication::firstOrCreate(['name' => 'website', 'app_token' => '25d55ad283aa400af464c76d713c07ad']);
         

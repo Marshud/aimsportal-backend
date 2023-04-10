@@ -27,9 +27,10 @@ class OrganisationResource extends JsonResource
             'category' => $this->category->name ?? 'none',
             'category_id' => $this->category_id,
             'description' => $this->description,
-            'iati_identifier' => $this->iati_org_id,
-            'iati_type' => $this->iati_org_type,
+            'iati_org_id' => $this->iati_org_id,
+            'iati_org_type' => $this->iati_org_type,
             'type' => $this->iati_type()->name ?? null,
+            'country' => $this->country,
             'audits' => ($this->canSeeAudits()) ? $this->audits : '',
         ];
     }
