@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\OrganisationCategoryResource;
 use App\Http\Resources\OrganisationResource;
 use App\Http\Resources\ProjectResource;
+use App\Models\County;
 use App\Models\Organisation;
 use App\Models\OrganisationCategory;
 use App\Models\Project;
@@ -323,6 +324,37 @@ class ReportsController extends Controller
         });
         return $filtered;
         
+    }
+
+    public function reportSummaryPerCounty(Request $request) {
+        $validator = Validator::make($request->all(),[
+            'currency' => 'nullable|string',
+            'state_id' => 'exists:states,wikidataid'
+
+        ]); 
+        if ($validator->fails()) {
+                
+            return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
+        }
+        $currency = $request->currency ?? 'USD';
+        $report = DB::table('projects')
+            ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
+            ->join('project_locations', 'projects.id', '=', 'project_locations.project_id')
+            ->join('project_participating_orgs', 'projects.id', '=', 'project_participating_orgs.project_id')
+            ->selectRaw('project_locations.county_id as county, count(project_participating_orgs.id) as count_orgs, count(DISTINCT projects.id) as count_projects, sum(value_amount) as data')
+            ->where('project_transactions.value_currency', $currency)
+            ->groupBy('county')
+            ->get();
+        $filtered = $report->map(function ($item) {
+            return [
+                'county' => County::find($item->county)->name ?? 'none',
+                'wikidataid' => County::find($item->county)->wikidataid ?? '0',
+                'funding' => $this->convertToInternationalCurrencySystem($item->data),
+                'projects' => $item->count_projects,
+                'organisations' => $item->count_orgs
+            ];
+        });
+        return $filtered;
     }
 
     public function reportOrganisationCount()
