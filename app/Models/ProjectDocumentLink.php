@@ -11,6 +11,8 @@ class ProjectDocumentLink extends Model
 
     protected $guarded = [];
 
+    protected $with = ['title_narratives', 'categories', 'desription_narratives'];
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');

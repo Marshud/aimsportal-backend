@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Resources\CodelistTranslationResource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Schema;
@@ -45,5 +46,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
        // CodelistTranslationResource::withoutWrapping();
+    Model::preventLazyLoading(true/*! $this->app->isProduction()*/);
     }
 }
