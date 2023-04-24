@@ -11,6 +11,10 @@ class ProjectOtherIdentifierOwnerOrg extends Model
 
     protected $table = 'project_other_identifier_org';
 
+    protected $guarded = ['id'];
+
+    protected $with = ['narratives'];
+
     public function narratives()
     {
         return $this->morphMany(ProjectNarrative::class, 'element');

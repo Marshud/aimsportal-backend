@@ -11,6 +11,8 @@ class ProjectParticipatingOrg extends Model
 
     protected $guarded = [];
 
+    protected $with = ['organisation'];
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');

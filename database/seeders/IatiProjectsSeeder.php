@@ -332,6 +332,17 @@ class IatiProjectsSeeder extends Seeder
                         );
                         
                     }
+
+                    foreach ($transaction->{'aid-type'} ?? [] as $aidType)
+                    {
+                        if ($aidType->attributes())
+                        {
+                            $thisTransaction->aid_types()->updateOrcreate([
+                                'code' => $aidType->attributes()['code'],
+                                'vocabulary' => $aidType->attributes()['vocabulary'] ?? 1
+                            ]);
+                        }
+                    }
                         
                     $providerOrg = $transaction->{'provider-org'};
                     if (!$providerOrg->attributes()) {
@@ -430,6 +441,7 @@ class IatiProjectsSeeder extends Seeder
                     }
                     
                 }
+                
                 
 
                 DB::commit();

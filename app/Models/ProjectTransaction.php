@@ -11,6 +11,8 @@ class ProjectTransaction extends Model
 
     protected $guarded = [];
 
+    protected $with = ['sectors', 'provider_org', 'receiver_org', 'aid_types'];
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');

@@ -11,6 +11,8 @@ class ProjectTransactionSector extends Model
 
     protected $guarded = [];
 
+    protected $with = ['narratives'];
+
     public function transaction()
     {
         return $this->belongsTo(ProjectTransaction::class, 'project_transaction_id');

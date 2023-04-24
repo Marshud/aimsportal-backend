@@ -11,6 +11,10 @@ class ProjectPlannedDisbursementProviderOrg extends Model
 
     protected $table = 'project_planned_disbursement_provider_org';
 
+    protected $guarded = ['id'];
+
+    protected $with = ['narratives'];
+
     public function disbursement()
     {
         return $this->belongsTo(ProjectPlannedDisbursement::class, 'project_planned_disbursement_id');

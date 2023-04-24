@@ -13,6 +13,8 @@ class ProjectTransactionProviderOrg extends Model
 
     protected $guarded = [];
 
+    protected $with = ['narratives'];
+
     public function organisation()
     {
         return $this->belongsTo(Organisation::class, 'organisation_id');

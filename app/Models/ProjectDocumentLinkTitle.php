@@ -9,6 +9,10 @@ class ProjectDocumentLinkTitle extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
+    protected $with = ['narratives'];
+
     public function project_document()
     {
         return $this->belongsTo(ProjectDocumentLink::class, 'project_document_id');

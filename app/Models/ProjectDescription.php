@@ -11,6 +11,8 @@ class ProjectDescription extends Model
 
     protected $guarded = [];
 
+    protected $with = ['narratives'];
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');

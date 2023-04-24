@@ -11,6 +11,8 @@ class ProjectLocation extends Model
 
     protected $guarded = [];
 
+    protected $with = ['state', 'county', 'payam'];
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');

@@ -12,6 +12,8 @@ class Organisation extends LaratrustTeam implements Auditable
     use \OwenIt\Auditing\Auditable;
     protected $guarded = [];
 
+    protected $with = ['team_users', 'category'];
+
     // const IATI_DEFINITION = [
     //     'enabled' => true,
     //     'version' => '2.0.3',

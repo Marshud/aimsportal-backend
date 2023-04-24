@@ -14,6 +14,11 @@ class Project extends Model
 
     protected $guarded =[];
 
+    protected $with = ['title_translations', 'reporting_organisation', 'reporting_organisation.category', 'humanitarian_scopes',
+    'participating_organisations', 'project_descriptions', 'other_identifiers', 'activity_dates', 'recipient_countries',
+    'recipient_regions', 'locations', 'sectors', 'tags', 'country_budget_items', 'policy_markers', 'default_aid_types',
+    'budgets', 'planned_disbursements', 'transactions'];
+
     public function title_translations()
     {
         return $this->morphMany(ProjectNarrative::class, 'element');
