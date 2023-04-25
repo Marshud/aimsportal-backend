@@ -46,6 +46,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
        // CodelistTranslationResource::withoutWrapping();
-    Model::preventLazyLoading(true/*! $this->app->isProduction()*/);
+    Model::preventLazyLoading(! $this->app->isProduction());
     }
 }
