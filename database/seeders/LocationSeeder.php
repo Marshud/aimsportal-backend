@@ -141,7 +141,8 @@ class LocationSeeder extends Seeder
     {
         foreach($counties as $county) {
             $savedCounty = $state->counties()->updateOrCreate(
-                ['name' => $county['name']]
+                ['name' => $county['name']],
+                ['wikidataid' => $county['wikidataid']]
             );
             $filteredPayams = $this->filterPayamsByCounty($payams, $savedCounty->name);
             foreach($filteredPayams as $payam) {
