@@ -331,6 +331,9 @@ class UserController extends Controller
 
     public function passwordReset(Request $request, User $user)
     {
+        if (!$request->hasValidSignature()) {
+            return redirect()->away(Config::get('app.frontend-url')."/error");
+        }
         return redirect()->away(Config::get('app.frontend-url')."/reset/password/" . $user->id);
     }
 
