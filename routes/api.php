@@ -48,6 +48,9 @@ Route::group(['prefix' => 'users', 'as' => 'users.'],function() {
     Route::post('/update-status/{id}', [UserController::class,'updateStatus']);
     Route::post('/update-user/{id}', [UserController::class,'updateUser']);
     Route::delete('/delete/{id}', [UserController::class,'destroy']);
+    Route::post('/reset-password', [UserController::class, 'sendPasswordResetLink']);
+    Route::get('/reset-password/{user}', [UserController::class, 'passwordReset'])->name('reset.password');
+    Route::post('/update-password/{user}', [UserController::class, 'updatePassword']);
 });
 
 Route::group(['prefix' => 'custom-fields', 'as' => 'custom.fields.'], function() {

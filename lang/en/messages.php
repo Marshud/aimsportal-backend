@@ -20,6 +20,7 @@ return [
     'not_found' => 'Resource not found',
     'unauthorized' => 'Action is not Authorized',
     'email_not_sent' => 'Error Sending Email, try again later',
-    'invalid_transaction' => 'Please add atleast one Funding Transaction or Expenditure'
+    'invalid_transaction' => 'Please add atleast one Funding Transaction or Expenditure',
+    'email_sent' => 'Succesfully sent email',
 
 ];
