@@ -41,7 +41,7 @@ class UserPasswordResetEmail extends Notification
         return (new MailMessage)
                     ->subject('Password Reset')
                     ->line('Please click the button below to reset your password.')
-                    ->action('Notification Action', $resetUrl)
+                    ->action('Reset', $resetUrl)
                     ->line('If you did not initiate this process, no further action is required');
     }
 
