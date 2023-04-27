@@ -11,8 +11,12 @@ use App\Mail\NewUserRequestToJoinOrganisation;
 use App\Mail\SignupStarted;
 use App\Models\EmailVerification;
 use App\Models\Organisation;
+use App\Models\PasswordResetRequest;
 use App\Models\User;
+use App\Notifications\UserPasswordResetEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -323,6 +327,69 @@ class UserController extends Controller
         }
 
         return response()->success(UserResource::collection(User::where('current_organisation_id',$request->user()->current_organisation_id))->get());
+    }
+
+    public function passwordReset(Request $request, User $user)
+    {
+        return redirect()->away(Config::get('app.frontend-url')."/reset/password/" . $user->id);
+    }
+
+    public function sendPasswordResetLink(Request $request) 
+    {
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        if ($validator->fails()) {
+			
+			return response()->error(__('messages.invalid_request'),422,$validator->messages()->toArray());
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        try {
+            $user->notify(new UserPasswordResetEmail());
+
+            PasswordResetRequest::updateOrCreate(
+                ['user_id' => $user->getKey()],
+                ['expires_at' => Carbon::now()->addMinutes(Config::get('auth.passwords.users.expire'), 60)]
+            );
+
+            return response()->success(__('messages.email_sent'));
+        }catch(\Exception $e) {
+            return response()->error($e->getMessage(), 500);
+        }
+        
+    }
+
+    public function updatePassword(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(),[
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+			
+			return response()->error(__('messages.invalid_request'),422,$validator->messages()->toArray());
+        }
+
+        if (!$this->userHasValidPasswordResetRequest($user)) {
+            return response()->error(__('messages.error'), 422, ['email' => [0 => 'invalid password reset link, try requesting password reset']]);
+        }
+
+        $user->update(['password' => Hash::make($request->password)]);
+        $user->passwordResetRequest()->update(['expires_at' => now()->subMinute()]);
+
+        return response()->success(__('messages.success'));
+    }
+
+
+    private function userHasValidPasswordResetRequest(User $user) : bool
+    {
+        if (!$user->passwordResetRequest()->exists()) return false;
+        if (now() > $user->passwordResetRequest->expires_at) return false;
+
+        return true;
     }
 
 }

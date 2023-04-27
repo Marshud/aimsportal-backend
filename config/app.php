@@ -69,7 +69,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('TIMEZONE', 'Africa/Kampala'),
 
     /*
     |--------------------------------------------------------------------------
@@ -212,5 +212,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
+
+    'frontend-url' => env('FRONTEND_URL', 'http://localhost:8080')
 
 ];

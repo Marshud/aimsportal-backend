@@ -55,4 +55,9 @@ class User extends Authenticatable
         return $this->hasOne(Config::get('laratrust.models.team'), 'id', 'current_organisation_id');
         
     }
+
+    public function passwordResetRequest()
+    {
+        return $this->hasOne(PasswordResetRequest::class, 'user_id');
+    }
 }

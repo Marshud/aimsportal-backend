@@ -13,6 +13,8 @@ class ProjectCountryBudgetItem extends Model
 
     protected $guarded = [];
 
+    protected $with = ['description_narratives'];
+
 
     public function project()
     {
