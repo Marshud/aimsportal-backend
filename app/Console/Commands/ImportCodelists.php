@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\Codelist;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
+
 use function Termwind\{render};
 use Throwable;
 
@@ -87,7 +89,7 @@ class ImportCodelists extends Command
                 $this->error($message);
             }
         }
-
+        Storage::disk('local')->put('codelists_imported.txt', 'true');
         render(view('terminal.iati-import', ['total_lists' => $total_lists, 'imported' => $imported, 'translations' => $translations])->render());
 
 

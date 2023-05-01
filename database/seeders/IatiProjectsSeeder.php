@@ -12,6 +12,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use SimpleXMLElement;
 use Throwable;
 
@@ -29,6 +30,7 @@ class IatiProjectsSeeder extends Seeder
             $this->saveProject($activity);
         }
         
+        Storage::disk('local')->put('ss_projects_imported.txt', 'true');
 
     }
 
@@ -44,22 +46,7 @@ class IatiProjectsSeeder extends Seeder
         $reportingOrg = $activity->{'reporting-org'};
         $reportingOrgAttributes = $reportingOrg->attributes();
         $iati_org_id = $reportingOrgAttributes['ref'] ?? 'n/a';
-        //$sectors = $activity->sectors;
-        //$sector_percentage_total = array_sum(array_column($sectors, 'sector_percentage'));
-
-        // if ($sector_percentage_total != 100)
-        // {
-        //     return response()->error(__('messages.invalid_request'), 422, 'sector percentage does not total 100');
-        // }
-
-        // $regions = $activity->recipient_regions;
-        // $region_percentage_total = ($regions) ? array_sum(array_column($regions, 'region_percentage')) : null;
-
-        // if ($region_percentage_total && $region_percentage_total != 100)
-        // {
-        //     return response()->error(__('messages.invalid_request'), 422, 'recipient region percentage does not total 100');
-        // }
-
+        
         //get company
         $organisation = Organisation::where('iati_org_id', $iati_org_id)->first();
 

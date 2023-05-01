@@ -100,21 +100,29 @@ class UserController extends Controller
         $aims_user->attachRoles([$request->role],$proposed_organisation);
 
         $organisation_users = $proposed_organisation->users;
+
+        //get admin users
+        $superAdminUsers = User::whereHasRole(CoreRoles::SuperAdministrator->value)->get();
         
         if ($organisation_users->count() === 1) {
-            //first organisation user and can be approved automatically
-            $aims_user->status = UserStatus::Approved;
-            $aims_user->save();
+            Mail::to($superAdminUsers)->send(new NewUserRequestToJoinOrganisation($aims_user));
+            
         }
 
         if ($organisation_users->count() > 1) {
 
-            $users_except_applicant = $organisation_users->where('id','!=',$aims_user->id);
-            try {
-                Mail::to($users_except_applicant)->send(new NewUserRequestToJoinOrganisation($aims_user));
-            } catch(\Exception $e) {
-                Log::error(['EMAIL_SEND_ERROR' => $e->getMessage()]);
+            $approved_users_excluding_applicant = $organisation_users->where('id','!=',$aims_user->id)->where('status', UserStatus::Approved);
+            if($approved_users_excluding_applicant->count() > 0) {
+                try {
+                    Mail::to($approved_users_excluding_applicant)->send(new NewUserRequestToJoinOrganisation($aims_user));
+                } catch(\Exception $e) {
+                    Log::error(['EMAIL_SEND_ERROR' => $e->getMessage()]);
+                }
             }
+            else if ($approved_users_excluding_applicant->count() == 0) {
+                Mail::to($superAdminUsers)->send(new NewUserRequestToJoinOrganisation($aims_user));
+            }
+            
             
         }
 
