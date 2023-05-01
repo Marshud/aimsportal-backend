@@ -1,6 +1,19 @@
 
+#!/bin/bash
+read_var() {
+    if [ ! -f ".env" ]; then
+        echo '.env file missing'
+        return 1
+    else
+        local ENV_FILE='.env'
+        local VAR=$(grep $1 "$ENV_FILE" | xargs)
+        IFS="=" read -ra VAR <<< "$VAR"
+        echo ${VAR[1]}
+    fi
+}
+
 # Turn on maintenance mode
-docker compose php php artisan down || true
+docker compose exec php php artisan down || true
 
 # Pull the latest changes from the git repository
 # git reset --hard
@@ -8,26 +21,36 @@ docker compose php php artisan down || true
 git pull origin main
 
 # Install/update composer dependecies
-docker compose php composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+docker compose exec php composer install --no-progress --no-interaction
 
 # Restart FPM
 echo 'Restarting FPM...'
 #docker compose php nginx-server nginx -s reload
 
 # Run database migrations
-docker compose php php artisan migrate --force
+docker compose exec php php artisan migrate --force
 
 # Clear caches
-docker compose php php artisan cache:clear
+docker compose exec php php artisan cache:clear
 
 # Clear and cache routes
-docker compose php php artisan route:cache
+docker compose exec php php artisan route:cache
 
 # Clear and cache config
-docker compose php php artisan config:cache
+docker compose exec php php artisan config:cache
 
 # Clear and cache views
-docker compose php php artisan view:cache
+docker compose exec php php artisan view:cache
 
 # Turn off maintenance mode
-docker compose php php artisan up
+docker compose exec php php artisan up
+
+# UPDATE FRONT END
+frontend_path=$(read_var FRONTEND_PATH)
+cd $frontend_path
+
+git pull origin main
+
+npm run build
+
+
