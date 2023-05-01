@@ -7,20 +7,24 @@ fi
 if [ ! -f ".env" ]; then
     echo "Creating env file for env $APP_ENV"
     cp .env.example .env
+    php artisan key:generate
 else
     echo "env file exists."
 fi
 
-php artisan key:generate
 php artisan config:clear
 php artisan view:clear
 php artisan cache:clear
 php artisan migrate
 php artisan db:seed
-php artisan iati:import-codelists
-php artisan db:seed --class=IatiProjectsSeeder
 
+if [ ! -f "storage/app/codelists_imported.txt" ]; then
+    php artisan iati:import-codelists
+fi
 
+if [ ! -f "storage/app/ss_projects_imported.txt" ]; then
+    php artisan db:seed --class=IatiProjectsSeeder
+fi
 
 php-fpm -D
 nginx -g "daemon off;"
