@@ -18,6 +18,7 @@ php artisan cache:clear
 php artisan migrate
 php artisan db:seed
 php artisan iati:import-codelists
+php artisan db:seed --class=IatiProjectsSeeder
 
 
 
