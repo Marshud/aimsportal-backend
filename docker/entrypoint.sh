@@ -15,7 +15,7 @@ fi
 php artisan config:clear
 php artisan view:clear
 php artisan cache:clear
-php artisan migrate
+php artisan migrate --force
 php artisan db:seed
 
 if [ ! -f "storage/app/codelists_imported.txt" ]; then
