@@ -422,14 +422,6 @@ class IatiProjectsSeeder extends Seeder
                         else if ($locationState)
                         {
                            
-                            $project->locations()->updateOrCreate([
-                                'ref' => $name
-                            ],[
-                                'state_id' => $locationState->getKey(),
-                                
-                                
-                                
-                            ]);
                             ProjectLocation::updateOrCreate(
                                 [
                                     'project_id' => $project->getKey(),
