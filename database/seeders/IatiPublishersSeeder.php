@@ -42,7 +42,7 @@ class IatiPublishersSeeder extends Seeder
                     ]
                 );
             } catch(\Exception $e) {
-                Log::error(['organisation import error' => $e->getMessage()]);
+                Log::error(['organisation import error:' => "iati: ".$publisher['iati_organisation_identifier'].$e->getMessage()]);
             }
             
             
@@ -76,7 +76,7 @@ class IatiPublishersSeeder extends Seeder
 
     private function getOrganisationCategory($name)
     {
-        $internationalCategory = OrganisationCategory::where('name', 'International');
+        $internationalCategory = OrganisationCategory::where('name', 'International')->first();
         $category = OrganisationCategory::where('name', 'like', '%' . $name . '%')->first(); 
         
         return (!$category) ? $internationalCategory->getKey() : $category->getKey();
