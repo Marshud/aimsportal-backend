@@ -308,10 +308,11 @@ class ReportsController extends Controller
             ->join('project_locations', 'projects.id', '=', 'project_locations.project_id')
             ->join('project_participating_orgs', 'projects.id', '=', 'project_participating_orgs.project_id')
             ->selectRaw('project_locations.state_id as state, count(project_participating_orgs.id) as count_orgs, count(DISTINCT projects.id) as count_projects, sum(value_amount) as data')
+            ->where('project_transactions.transaction_type_code', 1)
             ->where('project_transactions.value_currency', $currency)
             ->groupBy('state')
           //  ->orderBy('data', 'desc')
-            //->limit($no_of_years)
+            //->limit($no_of_years)transaction_type_code
             ->get();
         $filtered = $report->map(function ($item) {
             return [
@@ -342,6 +343,7 @@ class ReportsController extends Controller
             ->join('project_locations', 'projects.id', '=', 'project_locations.project_id')
             ->join('project_participating_orgs', 'projects.id', '=', 'project_participating_orgs.project_id')
             ->selectRaw('project_locations.county_id as county, count(project_participating_orgs.id) as count_orgs, count(DISTINCT projects.id) as count_projects, sum(value_amount) as data')
+            ->where('project_transactions.transaction_type_code', 1)
             ->where('project_transactions.value_currency', $currency)
             ->groupBy('county')
             ->get();
