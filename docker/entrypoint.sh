@@ -16,11 +16,12 @@ php artisan config:clear
 php artisan view:clear
 php artisan cache:clear
 php artisan migrate --force
-php artisan db:seed --force
 
 if [ ! -f "storage/app/codelists_imported.txt" ]; then
     php artisan iati:import-codelists
 fi
+
+php artisan db:seed --force
 
 if [ ! -f "storage/app/ss_projects_imported.txt" ]; then
     php artisan db:seed --force --class=IatiProjectsSeeder

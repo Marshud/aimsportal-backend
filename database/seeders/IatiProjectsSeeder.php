@@ -6,6 +6,7 @@ use App\Http\Resources\ProjectResource;
 use App\Models\County;
 use App\Models\Organisation;
 use App\Models\Project;
+use App\Models\ProjectLocation;
 use App\Models\State;
 use Exception;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -394,9 +395,10 @@ class IatiProjectsSeeder extends Seeder
 
                 
                 foreach($activity->location as $location) {
-                    $name = $location->name ?? $location->description->narrative ?? null;
+                    $name = $location->name->narrative ??  $location->description->narrative ?? null;
                     if ($name) 
                     {
+                        
                         //state first
                         $locationState = State::where('name', 'like', '%' . $name . '%')->first();
                         $locationCounty = County::where('name', 'like', '%' . $name . '%')->first();
@@ -404,14 +406,18 @@ class IatiProjectsSeeder extends Seeder
                         if ($locationCounty)
                         {
                            
-                            $project->locations()->updateOrCreate([
-                                'ref' => $name
-                            ],[
-                                'state_id' => $locationCounty->state->getKey(),
-                                'county_id' => $locationCounty->getKey(),
-                                
-                                
-                            ]);
+                            ProjectLocation::updateOrCreate(
+                                [
+                                    'project_id' => $project->getKey(),
+                                    'ref' => "county-id:".$locationCounty->getKey()
+                                ],
+                                [
+                                    'state_id' => $locationCounty->state->getKey(),
+                                    'county_id' => $locationCounty->getKey(),                                    
+                                    
+                                ]
+                            );
+                            
                         }
                         else if ($locationState)
                         {
@@ -424,6 +430,16 @@ class IatiProjectsSeeder extends Seeder
                                 
                                 
                             ]);
+                            ProjectLocation::updateOrCreate(
+                                [
+                                    'project_id' => $project->getKey(),
+                                    'ref' => "state-id:".$locationState->getKey()
+                                ],
+                                [
+                                    'state_id' => $locationState->getKey(),
+                                    
+                                ]
+                            );
                         } 
                     }
                     
