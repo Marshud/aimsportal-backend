@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignUuid('project_id')->constrained('projects')->onDelete('cascade');
             $table->string('iati_xml_id')->default('iati-activities/iati-activity/planned-disbursement');
-            $table->string('ref')->nullable();
+            $table->text('ref')->nullable();
             $table->boolean('humanitarian')->default(false);
             $table->string('transaction_type_code');
             $table->date('transaction_date');
