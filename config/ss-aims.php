@@ -22,6 +22,10 @@ return [
             'name' => 'fixer_api_key',
             'options' => null,
         ],
+        [
+            'name' => 'maximum_organisation_users',
+            'options' => null,
+        ]
 
     ]
 

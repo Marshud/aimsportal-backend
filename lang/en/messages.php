@@ -22,5 +22,6 @@ return [
     'email_not_sent' => 'Error Sending Email, try again later',
     'invalid_transaction' => 'Please add atleast one Funding Transaction or Expenditure',
     'email_sent' => 'Succesfully sent email',
+    'users_exceeded' => 'Maximum users for this organisation have been exceeded'
 
 ];
