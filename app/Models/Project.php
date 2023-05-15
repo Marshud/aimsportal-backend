@@ -7,17 +7,18 @@ use App\Traits\HasMeta;
 use App\Traits\HasOrganisation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Project extends Model
+class Project extends Model implements Auditable
 {
-    use HasUuids, HasFactory, HasMeta;
+    use HasUuids, HasFactory, HasMeta, \OwenIt\Auditing\Auditable;
 
     protected $guarded =[];
 
     protected $with = ['title_translations', 'reporting_organisation', 'reporting_organisation.category', 'humanitarian_scopes',
     'participating_organisations', 'project_descriptions', 'other_identifiers', 'activity_dates', 'recipient_countries',
     'recipient_regions', 'locations', 'sectors', 'tags', 'country_budget_items', 'policy_markers', 'default_aid_types',
-    'budgets', 'planned_disbursements', 'transactions'];
+    'budgets', 'planned_disbursements', 'transactions', 'audits'];
 
     public function title_translations()
     {

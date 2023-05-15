@@ -31,24 +31,8 @@ class OrganisationResource extends JsonResource
             'iati_org_type' => $this->iati_org_type,
             'type' => $this->iati_type()->name ?? null,
             'country' => $this->country,
-            'audits' => ($this->canSeeAudits()) ? $this->audits : '',
+            'audits' => (can_see_audits()) ? $this->audits : '',
         ];
     }
-
-    private function canSeeAudits(): bool
-    {
-        if (false === auth('sanctum')->check()) {
-            return false;
-        }
-
-        if (auth('sanctum')->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
-            return true;
-        }
-
-        if (auth('sanctum')->user()->hasRole(CoreRoles::Manager->value)) {
-            return true;
-        }
-
-        return false;
-    }
+    
 }

@@ -13,6 +13,10 @@ class OrganisationIdResolver implements Resolver
         if(method_exists($auditable, 'organisation')) {
             return $auditable->organisation_id;
         }
+        
+        if (auth('sanctum')->check()) {
+            return auth('sanctum')->user()->current_organisation_id;
+        }
 
         return null;
     }
