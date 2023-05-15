@@ -87,6 +87,16 @@ class UserController extends Controller
                 'code' => [__('auth.invalid_code')],
             ]);
         }
+
+        $proposed_organisation = Organisation::find($request->organisation);
+        $organisation_users = $proposed_organisation->users;
+
+        $maximum_organisation_users = get_system_setting('maximum_organisation_users') ?? 10;
+
+        if ($organisation_users >= $maximum_organisation_users) {
+            
+            return response()->error(__('messages.invalid_request'), 422, __('messages.users_exceeded'));
+        }
         
         $aims_user = new User;
         $aims_user->name = $request->name;
@@ -95,11 +105,11 @@ class UserController extends Controller
         $aims_user->current_organisation_id = $request->organisation;
         $aims_user->save();
 
-        $proposed_organisation = Organisation::find($request->organisation);
+        
 
         $aims_user->attachRoles([$request->role],$proposed_organisation);
 
-        $organisation_users = $proposed_organisation->users;
+        
 
         //get admin users
         $superAdminUsers = User::whereHasRole(CoreRoles::SuperAdministrator->value)->get();
