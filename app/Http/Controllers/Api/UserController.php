@@ -93,10 +93,10 @@ class UserController extends Controller
 
         $maximum_organisation_users = get_system_setting('maximum_organisation_users') ?? 10;
 
-        if ($organisation_users >= $maximum_organisation_users) {
+        // if ($organisation_users >= $maximum_organisation_users) {
             
-            return response()->error(__('messages.invalid_request'), 422, __('messages.users_exceeded'));
-        }
+        //     return response()->error(__('messages.invalid_request'), 422, __('messages.users_exceeded'));
+        // }
         
         $aims_user = new User;
         $aims_user->name = $request->name;
@@ -112,9 +112,10 @@ class UserController extends Controller
         
 
         //get admin users
-        $superAdminUsers = User::whereHasRole(CoreRoles::SuperAdministrator->value)->get();
+        $superAdminUsers = User::whereRoleIs(CoreRoles::SuperAdministrator->value)->get();
         
-        if ($organisation_users->count() === 1) {
+        if ($organisation_users->count() <= 1) {
+            Log::info('only one user');
             Mail::to($superAdminUsers)->send(new NewUserRequestToJoinOrganisation($aims_user));
             
         }

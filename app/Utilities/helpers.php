@@ -8,7 +8,10 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-
+use App\Enums\CoreRoles;
+use App\Models\Organisation;
+use App\Models\Project;
+use Illuminate\Support\Facades\Log;
 
 if (!function_exists('iati_get_code_options'))
 {
@@ -49,7 +52,7 @@ function transform_translation(Collection $translations)
     return $modified;
 }
 
-if(!function_exists('get_system_setting')){
+if (!function_exists('get_system_setting')) {
     function get_system_setting(string $settingKey, bool $cached = true) : ?string
     {
         $systemSettings = ($cached) ? 
@@ -62,11 +65,82 @@ if(!function_exists('get_system_setting')){
     }
 }
 
-if(!function_exists('set_system_setting')){
+if (!function_exists('set_system_setting')) {
     function set_system_setting(string $settingKey, string $settingValue)
     {
         SystemSetting::updateOrCreate(['key' => $settingKey], ['value' => $settingValue]);
         
+    }
+}
+
+if (!function_exists('can_create_project')) {
+    function can_create_project(Organisation $organisation) : bool
+    {
+        if (false === auth('sanctum')->check()) {
+            return false;
+        }
+        if (auth('sanctum')->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
+            return true;
+        }
+        if (auth('sanctum')->user()->hasRole(CoreRoles::Manager->value) || auth('sanctum')->user()->hasRole(CoreRoles::Contributor->value)) {
+            if(auth('sanctum')->user()->current_organisation_id == $organisation->id) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+if (!function_exists('can_edit_project')) {
+    function can_edit_project($project) : bool
+    {
+        if (false === auth('sanctum')->check()) {
+            return false;
+        }
+        if (auth('sanctum')->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
+            return true;
+        }
+        if (auth('sanctum')->user()->hasRole(CoreRoles::Manager->value) || auth('sanctum')->user()->hasRole(CoreRoles::Contributor->value)) {
+            if(auth('sanctum')->user()->current_organisation_id == $project->organisation_id || in_array(auth('sanctum')->user()->current_organisation_id, $project->participating_organisations->pluck('organisation_id')->toArray())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('can_see_audits')) {
+    function can_see_audits($model = null) : bool
+    {
+        if (false === auth('sanctum')->check()) {
+            return false;
+        }
+
+        if (auth('sanctum')->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
+            return true;
+        }
+
+        if (auth('sanctum')->user()->hasRole(CoreRoles::Manager->value)) {
+
+            // match this organisation with logged in user organisation
+            if ($model) {
+                if (method_exists($model, 'project')) {
+                    if(auth('sanctum')->user()->current_organisation_id == $model->project->organisation_id || in_array(auth('sanctum')->user()->current_organisation_id, $model->project->participating_organisations->pluck('organisation_id')->toArray())) {
+                        return true;
+                    }
+                }
+                if (method_exists($model, 'participating_organisations')) {
+                    if(auth('sanctum')->user()->current_organisation_id == $model->organisation_id || in_array(auth('sanctum')->user()->current_organisation_id, $model->participating_organisations->pluck('organisation_id')->toArray())) {
+                        return true;
+                    }
+                }
+                
+            }
+            
+        }
+
+        return false;
     }
 }
 

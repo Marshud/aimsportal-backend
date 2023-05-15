@@ -50,7 +50,8 @@ class ProjectResource extends JsonResource
             'budget' => ProjectBudgetResource::collection($this->whenLoaded('budgets')),
             'planned_disbursement' => ProjectPlannedDisbursementResource::collection($this->whenLoaded('planned_disbursements')),
             'transaction' => ProjectTransactionResource::collection($this->whenLoaded('transactions')),
-            
+            'audits' => (can_see_audits($this->resource)) ? $this->whenLoaded('audits') : '',
+            'editable' => can_edit_project($this->resource),
         ];
     }
 
