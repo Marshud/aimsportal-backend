@@ -39,6 +39,7 @@ Route::get('organisations/{id}/users', [OrganisationController::class, 'listOrga
 Route::group(['prefix' => 'users', 'as' => 'users.'],function() {
     Route::get('/', [UserController::class,'listOrganisationUsers']);
     Route::get('/profile', [UserController::class,'profile']);
+    Route::get('/supers', [UserController::class, 'listSuperAdministrators']);
     Route::get('/{id}', [UserController::class,'show']);
     Route::post('/validate-email', [UserController::class,'startEmailSignup']);
     Route::post('/register', [UserController::class,'register']);
@@ -50,7 +51,8 @@ Route::group(['prefix' => 'users', 'as' => 'users.'],function() {
     Route::delete('/delete/{id}', [UserController::class,'destroy']);
     Route::post('/reset-password', [UserController::class, 'sendPasswordResetLink']);
     Route::get('/reset-password/{user}', [UserController::class, 'passwordReset'])->name('reset.password');
-    Route::post('/update-password/{user}', [UserController::class, 'updatePassword']);
+    Route::post('/update-password/{user}', [UserController::class, 'updatePassword']);    
+    Route::post('/super', [UserController::class, 'createSuperAdministrator']);
 });
 
 Route::group(['prefix' => 'custom-fields', 'as' => 'custom.fields.'], function() {
