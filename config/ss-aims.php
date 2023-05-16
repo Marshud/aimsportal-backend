@@ -25,6 +25,10 @@ return [
         [
             'name' => 'maximum_organisation_users',
             'options' => null,
+        ],
+        [
+            'name' => 'months_to_keep_project_changes',
+            'options' => ['1', '3', '6', '12'],
         ]
 
     ]
