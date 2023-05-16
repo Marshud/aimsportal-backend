@@ -25,6 +25,7 @@ class ProjectParticipatingOrgResource extends JsonResource
             'type' => $this->iati_type()->name ?? null,
             'role' => $this->iati_role()->name ?? null,
             'crs_channel_code' => $this->iati_crs_channel()->name ?? null,
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
 
         ];
     }

@@ -20,6 +20,7 @@ class ProjectActivityDateResource extends JsonResource
             'type' => $this->iati_type()->name ?? null,
             'iati_iso_date' => $this->iso_date,
             'narratives' => ProjectNarrativeResource::collection($this->narratives),
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 
