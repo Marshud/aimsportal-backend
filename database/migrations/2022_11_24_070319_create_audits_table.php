@@ -14,25 +14,33 @@ class CreateAuditsTable extends Migration
      */
     public function up()
     {
-        Schema::connection(config('audit.drivers.database.connection', config('database.default')))->create('audits', function (Blueprint $table) {
-        
-            $morphPrefix = Config::get('audit.user.morph_prefix', 'user');
-            
+        $connection = config('audit.drivers.database.connection', config('database.default'));
+        $table = config('audit.drivers.database.table', 'audits');
+
+        Schema::connection($connection)->create($table, function (Blueprint $table) {
+
+            $morphPrefix = config('audit.user.morph_prefix', 'user');
+
             $table->bigIncrements('id');
             $table->string($morphPrefix . '_type')->nullable();
             $table->unsignedBigInteger($morphPrefix . '_id')->nullable();
             $table->string('event');
-            $table->morphs('auditable');
-            $table->longtext('old_values')->nullable();
-            $table->longtext('new_values')->nullable();
+            $table->uuid('auditable_id');
+            $table->string('auditable_type');
+            $table->text('old_values')->nullable();
+            $table->text('new_values')->nullable();
             $table->text('url')->nullable();
             $table->ipAddress('ip_address')->nullable();
             $table->string('user_agent', 1023)->nullable();
             $table->string('tags')->nullable();
-            $table->foreignId('organisation_id')->nullable()->constrained('organisations');
+            $table->unsignedBigInteger('organisation_id')->nullable();
             $table->timestamps();
 
             $table->index([$morphPrefix . '_id', $morphPrefix . '_type']);
+            $table->index([
+                'auditable_id', 
+                'auditable_type',
+            ]);
         });
     }
 
@@ -43,6 +51,9 @@ class CreateAuditsTable extends Migration
      */
     public function down()
     {
-        Schema::connection(config('audit.drivers.database.connection', config('database.default')))->drop('audits');
+        $connection = config('audit.drivers.database.connection', config('database.default'));
+        $table = config('audit.drivers.database.table', 'audits');
+
+        Schema::connection($connection)->drop($table);
     }
 }

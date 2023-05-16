@@ -23,14 +23,15 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Whoops\Run;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum'])->only('profile','deauthenticate','updateStatus','updateUser','show','listOrganisationUsers');
-        $this->middleware('isapproved')->only('updateStatus','updateUser','show','listOrganisationUsers');
+        $this->middleware(['auth:sanctum'])->only('profile', 'destroy', 'deauthenticate', 'updateStatus', 'updateUser', 'show', 'listOrganisationUsers', 'listSuperAdministrators', 'createSuperAdministrator');
+        $this->middleware('isapproved')->only('updateStatus', 'updateUser', 'show', 'listOrganisationUsers');
         $this->middleware('verified.app')->only('authenticateGuest');
     }   
 
@@ -93,10 +94,10 @@ class UserController extends Controller
 
         $maximum_organisation_users = get_system_setting('maximum_organisation_users') ?? 10;
 
-        // if ($organisation_users >= $maximum_organisation_users) {
+        if ($organisation_users >= $maximum_organisation_users) {
             
-        //     return response()->error(__('messages.invalid_request'), 422, __('messages.users_exceeded'));
-        // }
+            return response()->error(__('messages.invalid_request'), 422, __('messages.users_exceeded'));
+        }
         
         $aims_user = new User;
         $aims_user->name = $request->name;
@@ -279,6 +280,13 @@ class UserController extends Controller
 			return response()->error(__('messages.invalid_request'),422,$validator->messages()->toArray());
         }
 
+        if ($request->role == CoreRoles::SuperAdministrator->value) {
+
+            if (!$request->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
+                return response()->error('Unauthorized',403); 
+            }
+        }
+
         $aims_user = User::find($id);
 
         if (!$aims_user) {
@@ -286,6 +294,10 @@ class UserController extends Controller
         }
 
         $aims_user->name = $request->name;
+        if ($request->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
+            $aims_user->email = $request->email;
+            $aims_user->status = $request->status;
+        }
         $aims_user->current_organisation_id = ($request->organisation) ? $request->organisation : null;
         $aims_user->language = $request->language;
         $aims_user->save();
@@ -326,7 +338,12 @@ class UserController extends Controller
             return response()->error(__('messages.not_found'),404);
         }
 
+        if ($request->user()->id == $id) {
+            return response()->error('Unauthorized',403); 
+        }
+
         //check if user has data
+        
 
         $aims_user->delete();
         return response()->success(__('messages.success_deleted'));
@@ -342,7 +359,7 @@ class UserController extends Controller
         if ($request->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
             
             //todo add pagination
-            return response()->success(UserResource::collection(User::all()));
+            return response()->success(UserResource::collection(User::paginate(50)));
         }
 
         return response()->success(UserResource::collection(User::where('current_organisation_id',$request->user()->current_organisation_id))->get());
@@ -404,6 +421,56 @@ class UserController extends Controller
 
         return response()->success(__('messages.success'));
     }
+
+    public function listSuperAdministrators(Request $request)
+    {
+        if (!$request->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
+            return response()->error('Unauthorized',403); 
+        }
+        return response()->success(UserResource::collection(User::whereRoleIs(CoreRoles::SuperAdministrator->value)->get()));
+    }
+
+    public function createSuperAdministrator(Request $request)
+    {
+        if (!$request->user()->hasRole(CoreRoles::SuperAdministrator->value)) 
+        {
+            return response()->error('Unauthorized',403); 
+        }
+
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'email|required|unique:users,email',
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ],
+        ]);
+
+        if ($validator->fails()) {
+			
+			return response()->error(__('messages.invalid_request'),422,$validator->messages()->toArray());
+        }
+
+        $user = new User;
+        $user->email = $request->email;
+        $user->name = $request->name;
+        $user->language = 'en';
+        $user->two_factor_authentication = 1;
+        $user->status = UserStatus::Approved;
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        $user->attachRole(CoreRoles::SuperAdministrator->value);
+
+        return response()->success(new UserResource($user));
+    }
+    
 
 
     private function userHasValidPasswordResetRequest(User $user) : bool
