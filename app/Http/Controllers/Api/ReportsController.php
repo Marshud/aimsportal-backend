@@ -34,7 +34,7 @@ class ReportsController extends Controller
 
         ]); 
         $currency = $request->currency ?? 'USD';
-        $no_of_years = $request->number_of_years ?? 12;
+        $no_of_years = $request->number_of_years ?? 10;
         if ($validator->fails()) {
                 
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
@@ -61,7 +61,7 @@ class ReportsController extends Controller
 
         ]); 
         $currency = $request->currency ?? 'USD';
-        $no_of_years = $request->number_of_years ?? 12;
+        $no_of_years = $request->number_of_years ?? 10;
         if ($validator->fails()) {
                 
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
@@ -154,7 +154,7 @@ class ReportsController extends Controller
 
         ]); 
         $currency = $request->currency ?? 'USD';
-        $no_of_years = $request->number_of_years ?? 12;
+        $no_of_years = $request->number_of_years ?? 10;
         if ($validator->fails()) {
                 
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
@@ -187,6 +187,7 @@ class ReportsController extends Controller
 
         ]); 
         $no_of_years = $request->number_of_years ?? 12;
+        $current_year = date('Y');
         if ($validator->fails()) {
                 
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
@@ -201,7 +202,9 @@ class ReportsController extends Controller
             ->limit($no_of_years)
             ->get();
 
-        return $report;
+        return $report->filter(function ($item) use($current_year) {
+            return $item->year <= $current_year;
+        })->values();
         
     }
 
@@ -213,6 +216,7 @@ class ReportsController extends Controller
 
         ]); 
         $no_of_years = $request->number_of_years ?? 12;
+        $current_year = date('Y');
         if ($validator->fails()) {
                 
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
@@ -227,7 +231,9 @@ class ReportsController extends Controller
             ->limit($no_of_years)
             ->get();
 
-        return $report;
+        return $report->filter(function ($item) use($current_year) {
+            return $item->year <= $current_year;
+        })->values();
         
     }
 
@@ -239,6 +245,7 @@ class ReportsController extends Controller
 
         ]); 
         $no_of_years = $request->number_of_years ?? 12;
+        $current_year = date('Y');
         if ($validator->fails()) {
                 
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
@@ -253,7 +260,9 @@ class ReportsController extends Controller
             ->limit($no_of_years)
             ->get();
 
-        return $report;
+        return $report->filter(function ($item) use($current_year) {
+            return $item->year <= $current_year;
+        })->values();
         
     }
 
@@ -376,6 +385,20 @@ class ReportsController extends Controller
 
         return $result;
 
+    }
+
+    public function reportProjectCount()
+    {
+        $totalProjects = Project::count();
+
+        $report = DB::table('projects')
+            ->join('project_activity_dates', 'projects.id', '=', 'project_activity_dates.project_id')
+            ->selectRaw('project_activity_dates.type as code, count(DISTINCT projects.id) as data')
+            ->groupBy('code')
+            ->get();
+
+        $report->push(collect(['code'=> 0, 'data' => $totalProjects]));
+        return $report;
     }
 
     private function getSectorCode($vocabulary, $code)

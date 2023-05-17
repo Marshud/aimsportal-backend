@@ -106,6 +106,7 @@ Route::group(['prefix' => 'reports', 'as' => 'reports.'], function() {
     Route::any('summary-per-state', [ReportsController::class, 'reportSummaryPerState']);
     Route::any('organisations-count', [ReportsController::class, 'reportOrganisationCount']);
     Route::any('summary-per-county', [ReportsController::class, 'reportSummaryPerCounty']);
+    Route::any('projects-count', [ReportsController::class, 'reportProjectCount']);
 
 });
 

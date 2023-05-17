@@ -27,6 +27,8 @@ class IatiProjectsSeeder extends Seeder
         $xml = $this->readXmlFile();
         $activities = $xml->xpath('/iati-activities/iati-activity');
         
+        //disable auditing for initial data import
+
         foreach ($activities as $activity) {
             $this->saveProject($activity);
         }
@@ -98,6 +100,7 @@ class IatiProjectsSeeder extends Seeder
                 'conditions_attached' => $conditionsAttached,
                 'activity_scope' => $activityScopeCode,
                 'activity_status' => $activityStatusCode,
+                'humanitarian' => $humanitarian,
                 ]
             );
 

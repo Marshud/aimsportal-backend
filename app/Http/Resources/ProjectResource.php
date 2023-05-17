@@ -32,6 +32,7 @@ class ProjectResource extends JsonResource
             'iati_activity_status' => iati_get_code_value('ActivityStatus', $this->activity_status),
             'status' => $this->status,
             'activity_status' => $this->activity_status,
+            'humanitarian' => $this->humanitarian,
             'title' => ProjectNarrativeResource::collection($this->whenLoaded('title_translations')),
             'reporting_org' => new OrganisationResource($this->whenLoaded('reporting_organisation')),
             'humanitarian_scope' => ProjectHumanitarianScopeResource::collection($this->whenLoaded('humanitarian_scopes')),
