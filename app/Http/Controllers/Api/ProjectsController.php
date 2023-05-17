@@ -53,6 +53,7 @@ class ProjectsController extends Controller
             'activity_scope' => 'nullable|numeric',
             'activity_status' => 'required|numeric',
             'locations' => 'nullable|array',
+            'humanitarian' => 'required|boolean'
             //'is_iati_project' => 'boolean',
 
         ],[
@@ -98,6 +99,7 @@ class ProjectsController extends Controller
                 'conditions_attached' => $request->project_conditions ?? 0,
                 'activity_scope' => $request->activity_scope ?? 4,
                 'activity_status' => $request->activity_status,
+                'humanitarian' => $request->humanitarian,
             ]);
 
             try {
@@ -387,7 +389,8 @@ class ProjectsController extends Controller
             'organisation_id' => 'required|exists:organisations,id',
             'activity_scope' => 'nullable|numeric',
             'activity_status' => 'required|numeric',
-            'locations' => 'nullable|array'
+            'locations' => 'nullable|array',
+            'humanitarian' => 'required|boolean'
             //'is_iati_project' => 'boolean',
 
         ]);
@@ -433,6 +436,7 @@ class ProjectsController extends Controller
                 'conditions_attached' => $request->project_conditions ?? 0,
                 'activity_scope' => $request->activity_scope ?? 4,
                 'activity_status' => $request->activity_status,
+                'humanitarian' => $request->humanitarian,
             ]);
 
             try {
