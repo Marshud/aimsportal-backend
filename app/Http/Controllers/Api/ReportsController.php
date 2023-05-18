@@ -42,7 +42,7 @@ class ReportsController extends Controller
 
        $report = DB::table('projects')
             ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
-            ->selectRaw('YEAR(transaction_date) as year, sum(value_amount)/1000000 as data')
+            ->selectRaw('YEAR(transaction_date) as year, ROUND(sum(value_amount)/1000000,0) as data')
             ->where('project_transactions.value_currency', $currency)
             ->groupBy('year')
             ->orderBy('year', 'desc')
@@ -89,6 +89,7 @@ class ReportsController extends Controller
         ]); 
         $currency = $request->currency ?? 'USD';
         $no_of_years = $request->number_of_years ?? 6;
+        $limit = $request->limit ?? 20;
         if ($validator->fails()) {
                 
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
@@ -97,11 +98,11 @@ class ReportsController extends Controller
        $report = DB::table('projects')
             ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
             ->join('project_sectors', 'projects.id', '=', 'project_sectors.project_id')
-            ->selectRaw('project_sectors.code as sector, project_sectors.vocabulary as vocabulary, sum(value_amount)/1000000 as data')
+            ->selectRaw('project_sectors.code as sector, project_sectors.vocabulary as vocabulary, ROUND(sum(value_amount)/1000000,0) as data')
             ->where('project_transactions.value_currency', $currency)
             ->groupBy('sector', 'vocabulary')
-          //  ->orderBy('data', 'desc')
-            //->limit($no_of_years)
+            ->orderBy('data', 'desc')
+            ->limit($limit)
             ->get();
         $filtered = $report->map(function ($item) {
             return [
@@ -109,7 +110,9 @@ class ReportsController extends Controller
                 'data' => $item->data
             ];
         });
-        return $filtered;
+        return $filtered->filter(function($item){
+            return $item['sector'] != 'unknown';
+        })->values();
         
     }
 
@@ -122,6 +125,7 @@ class ReportsController extends Controller
         ]); 
         $currency = $request->currency ?? 'USD';
         $no_of_years = $request->number_of_years ?? 6;
+        $limit = $request->limit ?? 20;
         if ($validator->fails()) {
                 
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
@@ -130,11 +134,11 @@ class ReportsController extends Controller
        $report = DB::table('projects')
             ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
             ->join('project_transaction_provider_org', 'project_transactions.id', '=', 'project_transaction_provider_org.project_transaction_id')
-            ->selectRaw('project_transaction_provider_org.organisation_id as organisation, sum(value_amount)/1000000 as data')
+            ->selectRaw('project_transaction_provider_org.organisation_id as organisation, ROUND(sum(value_amount)/1000000, 0) as data')
             ->where('project_transactions.value_currency', $currency)
             ->groupBy('organisation')
-           // ->orderBy('data', 'desc')
-            //->limit($no_of_years)
+            ->orderBy('data', 'desc')
+            ->limit($limit)
             ->get();
         $filtered = $report->map(function ($item) {
             return [
@@ -163,7 +167,7 @@ class ReportsController extends Controller
        $report = DB::table('projects')
             ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
             ->join('project_locations', 'projects.id', '=', 'project_locations.project_id')
-            ->selectRaw('project_locations.state_id as state, sum(value_amount)/1000000 as data')
+            ->selectRaw('project_locations.state_id as state, ROUND(sum(value_amount)/1000000,0) as data')
             ->where('project_transactions.value_currency', $currency)
             ->groupBy('state')
            // ->orderBy('data', 'desc')
@@ -408,13 +412,13 @@ class ReportsController extends Controller
             return iati_get_code_value('SectorCategory', $code)->name ?? 'unknown';
         }
 
-        if ($sectorVocabulary && $sectorVocabulary->code == '7') {
-            return iati_get_code_value('UNSDG-Goals', $code)->name ?? 'unknown';
-        }
+        // if ($sectorVocabulary && $sectorVocabulary->code == '7') {
+        //     return iati_get_code_value('UNSDG-Goals', $code)->name ?? 'unknown';
+        // }
 
-        if ($sectorVocabulary && $sectorVocabulary->code == '8') {
-            return iati_get_code_value('UNSDG-Targets', $code)->name ?? 'unknown';
-        }
+        // if ($sectorVocabulary && $sectorVocabulary->code == '8') {
+        //     return iati_get_code_value('UNSDG-Targets', $code)->name ?? 'unknown';
+        // }
        
        return iati_get_code_value('Sector', $code)->name ?? 'unknown';
     }
