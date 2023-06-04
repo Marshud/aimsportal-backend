@@ -22,7 +22,8 @@ class ProjectHumanitarianScopeResource extends JsonResource
             'iati_vocabulary' => $this->vocabulary,
             'iati_vocabulary_uri' => $this->vocabulary_uri,
             'vocabulary' => $this->iati_vocabulary()->name ?? null,
-            'type' => $this->iati_type()->name ?? null
+            'type' => $this->iati_type()->name ?? null,
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 

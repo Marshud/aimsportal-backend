@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ProjectResult extends Model
+class ProjectResult extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
 
-    protected $with = ['title_narratives'];
+    protected $with = ['title_narratives', 'audits'];
 
     public function project()
     {

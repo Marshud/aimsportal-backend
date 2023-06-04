@@ -4,16 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ProjectTransactionReceiverOrg extends Model
+class ProjectTransactionReceiverOrg extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $table = 'project_transaction_receiver_org';
 
     protected $guarded = [];
 
-    protected $with = ['narratives'];
+    protected $with = ['narratives', 'audits'];
 
     public function organisation()
     {

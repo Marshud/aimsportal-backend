@@ -21,6 +21,7 @@ class ProjectRecipientCountryResource extends JsonResource
             'iati_percentage' => $this->percentage,
             'code' => $this->iati_code()->name ?? null,
             'narratives' => ProjectNarrativeResource::collection($this->narratives),
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 }

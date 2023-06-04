@@ -34,6 +34,7 @@ class ProjectTransactionResource extends JsonResource
             'provider_org' => new ProjectTransactionProviderOrgResource($this->provider_org),
             'receiver_org' => new ProjectTransactionReceiverOrgResource($this->receiver_org),
             'aid_types' => ProjectTransactionAidTypeResource::collection($this->aid_types),
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 }

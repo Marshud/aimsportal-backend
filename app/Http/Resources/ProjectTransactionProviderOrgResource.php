@@ -21,6 +21,7 @@ class ProjectTransactionProviderOrgResource extends JsonResource
             'iati_ref' => $this->ref,
             'iati_provider_activity_id' => $this->provider_activity_id,
             'type' => $this->iati_type()->name ?? null,
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 }

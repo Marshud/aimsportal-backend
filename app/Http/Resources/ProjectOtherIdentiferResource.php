@@ -21,6 +21,7 @@ class ProjectOtherIdentiferResource extends JsonResource
             'iati_type' => $this->type,
             'type' => $this->iati_type()->name ?? null,
             'owner_org' => new ProjectOtherIdentiferOwnerOrgResource($this->owner_org),
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 }

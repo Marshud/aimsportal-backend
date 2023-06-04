@@ -19,6 +19,7 @@ class ProjectNarrativeResource extends JsonResource
             'id' => $this->id,
             'narrative' => $this->narrative,
             'lang' => $this->lang,
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 

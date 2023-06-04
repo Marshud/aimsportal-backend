@@ -57,20 +57,5 @@ class ProjectResource extends JsonResource
         ];
     }
 
-    private function canSeeAudits(): bool
-    {
-        if (false === auth('sanctum')->check()) {
-            return false;
-        }
-
-        if (auth('sanctum')->user()->hasRole(CoreRoles::SuperAdministrator->value)) {
-            return true;
-        }
-
-        if (auth('sanctum')->user()->hasRole(CoreRoles::Manager->value)) {
-            return true;
-        }
-
-        return false;
-    }
+    
 }

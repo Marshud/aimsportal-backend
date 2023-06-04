@@ -5,14 +5,15 @@ namespace App\Models;
 use App\Traits\HasIatiCodes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ProjectHumanitarianScope extends Model
+class ProjectHumanitarianScope extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
 
-    protected $with = ['narratives'];
+    protected $with = ['narratives', 'audits'];
 
     public function project()
     {
