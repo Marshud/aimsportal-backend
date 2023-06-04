@@ -25,6 +25,7 @@ class ProjectPlannedDisbursementResource extends JsonResource
             'type' => $this->iati_type()->name ?? null,
             'provider_org' => new ProjectPlannedDisbursementProviderOrgResource($this->provider_org),
             'receiver_org' => new ProjectPlannedDisbursementReceiverOrgResource($this->receiver_org),
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 }

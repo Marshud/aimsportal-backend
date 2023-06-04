@@ -20,6 +20,7 @@ class ProjectDescriptionResource extends JsonResource
             'narratives' => ProjectNarrativeResource::collection($this->narratives),
             'iati_type' => $this->type,
             'type' => $this->iati_type()->name ?? null,
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 

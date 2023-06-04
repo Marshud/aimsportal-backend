@@ -25,6 +25,7 @@ class ProjectBudgetResource extends JsonResource
             'iati_value_amount' => $this->value_amount,
             'type' => $this->iati_type()->name ?? null,
             'status' => $this->iati_status()->name ?? null,
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 }

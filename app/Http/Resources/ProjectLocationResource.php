@@ -24,6 +24,7 @@ class ProjectLocationResource extends JsonResource
             'county_name' => $this->county->name ?? null,
             'payam' => $this->payam_id,
             'payam_name' => $this->payam->name ?? null,
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 }

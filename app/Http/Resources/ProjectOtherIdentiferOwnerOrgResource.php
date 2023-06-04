@@ -19,6 +19,7 @@ class ProjectOtherIdentiferOwnerOrgResource extends JsonResource
             'id' => $this->id,
             'iati_ref' => $this->ref,
             'narratives' => ProjectNarrativeResource::collection($this->narratives),
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 

@@ -4,16 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ProjectCountryBudgetItem extends Model
+class ProjectCountryBudgetItem extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $table = 'project_budget_items';
 
     protected $guarded = [];
 
-    protected $with = ['description_narratives'];
+    protected $with = ['description_narratives', 'audits'];
 
 
     public function project()

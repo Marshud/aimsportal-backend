@@ -25,6 +25,7 @@ class ProjectPolicyMarkerResource extends JsonResource
             'vocabulary' => $this->iati_vocabulary()->name ?? null,
             'significance' => $this->iati_significance()->name ?? null,
             'narratives' => ProjectNarrativeResource::collection($this->narratives),
+            'audits' => (can_see_audits($this->resource)) ? AuditResource::collection($this->whenLoaded('audits')) : '',
         ];
     }
 }
