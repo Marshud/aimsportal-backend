@@ -90,11 +90,11 @@ class UserController extends Controller
         }
 
         $proposed_organisation = Organisation::find($request->organisation);
-        $organisation_users = $proposed_organisation->users;
+        $organisation_users = $proposed_organisation->team_users;
 
         $maximum_organisation_users = get_system_setting('maximum_organisation_users') ?? 10;
 
-        if ($organisation_users >= $maximum_organisation_users) {
+        if ($organisation_users->count() >= $maximum_organisation_users) {
             
             return response()->error(__('messages.invalid_request'), 422, __('messages.users_exceeded'));
         }
