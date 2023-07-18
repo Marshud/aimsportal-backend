@@ -748,9 +748,9 @@ class ProjectsController extends Controller
     public function index(Request $request)
     {
         
-        $builder = Cache::remember('project_listing_search', 30 * 60, function () {
+        //$builder = Cache::remember('project_listing_search', 30 * 60, function () {
             
-          return  Project::query()->where(function ($q) {
+        $builder  = Project::query()->where(function ($q) {
             if (request()->has('organisation') && request()->filled('organisation')) {
                 $q->whereHas('participating_organisations', function ($q) {
                     $q->where('organisation_id', request()->get('organisation'));
@@ -807,7 +807,7 @@ class ProjectsController extends Controller
             }
             
             });
-        });
+    //    });
        
 
         return ProjectResource::collection($builder->paginate(20));
