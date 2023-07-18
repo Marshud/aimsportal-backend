@@ -18,6 +18,7 @@ use App\Models\ProjectSector;
 use App\Models\ProjectTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -746,9 +747,10 @@ class ProjectsController extends Controller
 
     public function index(Request $request)
     {
-       
-       $builder = Project::query();
-       $builder->where(function ($q) {
+        
+        $builder = Cache::remember('project_listing_search', 30 * 60, function () {
+
+            Project::where(function ($q) {
             if (request()->has('organisation') && request()->filled('organisation')) {
                 $q->whereHas('participating_organisations', function ($q) {
                     $q->where('organisation_id', request()->get('organisation'));
@@ -805,8 +807,8 @@ class ProjectsController extends Controller
             }
             
         });
-
-    
+        });
+       
 
         return ProjectResource::collection($builder->paginate(20));
     }
