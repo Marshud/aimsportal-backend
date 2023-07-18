@@ -153,7 +153,7 @@ class OrganisationController extends Controller
         // }
         // return response()->success(OrganisationResource::collection(Organisation::where('id', $request->user()->current_organisation_id)));
         return response()->success(OrganisationResource::collection(
-            Cache::remember('organisation_listing_controller',now()->addHours(2), function () {
+            Cache::remember('organisation_listing_controller', 180 * 60, function () {
             return Organisation::all();
             }) 
         ));
