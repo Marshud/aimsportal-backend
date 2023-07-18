@@ -20,6 +20,8 @@ class NewUserRequestToJoinOrganisation extends Mailable
      * @var \App\Models\User
      */
     public $newUser;
+    
+    public $frontEndUrl;
 
     /**
      * Create a new message instance.
@@ -29,6 +31,7 @@ class NewUserRequestToJoinOrganisation extends Mailable
     public function __construct(User $newUser)
     {
         $this->newUser = $newUser;
+        $this->frontEndUrl = env('FRONTEND_URL', 'http://aims.mofp.gov.ss')."/organisation/".$newUser->currentOrganisation->id;
     }
 
     /**
