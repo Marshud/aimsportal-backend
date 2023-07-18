@@ -15,6 +15,7 @@ use App\Models\ProjectTransaction;
 use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
@@ -40,14 +41,18 @@ class ReportsController extends Controller
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
-       $report = DB::table('projects')
-            ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
-            ->selectRaw('YEAR(transaction_date) as year, ROUND(sum(value_amount)/1000000,0) as data')
-            ->where('project_transactions.value_currency', $currency)
-            ->groupBy('year')
-            ->orderBy('year', 'desc')
-            ->limit($no_of_years)
-            ->get();
+        $report = Cache::remember('report_funding_trends',now()->addHours(3), function () use($currency, $no_of_years) {
+
+            return DB::table('projects')
+                ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
+                ->selectRaw('YEAR(transaction_date) as year, ROUND(sum(value_amount)/1000000,0) as data')
+                ->where('project_transactions.value_currency', $currency)
+                ->groupBy('year')
+                ->orderBy('year', 'desc')
+                ->limit($no_of_years)
+                ->get();
+        });     
+        
 
         return $report;
         
@@ -67,7 +72,9 @@ class ReportsController extends Controller
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
-       $report = DB::table('projects')
+        $report = Cache::remember('report_budgeting_trends',now()->addHours(3), function () use($currency, $no_of_years) {
+
+            return DB::table('projects')
             ->join('project_budgets', 'projects.id', '=', 'project_budgets.project_id')
             ->selectRaw('YEAR(period_start) as year, sum(value_amount) as data')
             ->where('project_budgets.value_currency', $currency)
@@ -75,6 +82,8 @@ class ReportsController extends Controller
             ->orderBy('year', 'desc')
             ->limit($no_of_years)
             ->get();
+        });
+
 
         return $report;
         
@@ -95,7 +104,9 @@ class ReportsController extends Controller
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
-       $report = DB::table('projects')
+        $report = Cache::remember('report_funding_by_sector',now()->addHours(3), function () use($currency, $limit) {
+
+            return DB::table('projects')
             ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
             ->join('project_sectors', 'projects.id', '=', 'project_sectors.project_id')
             ->selectRaw('project_sectors.code as sector, project_sectors.vocabulary as vocabulary, ROUND(sum(value_amount)/1000000,0) as data')
@@ -104,6 +115,8 @@ class ReportsController extends Controller
             ->orderBy('data', 'desc')
             ->limit($limit)
             ->get();
+        });
+        
         $filtered = $report->map(function ($item) {
             return [
                 'sector' => $this->getSectorCode($item->vocabulary, $item->sector),

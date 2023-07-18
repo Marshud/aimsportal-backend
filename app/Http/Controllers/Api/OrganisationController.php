@@ -8,6 +8,7 @@ use App\Http\Resources\OrganisationResource;
 use App\Http\Resources\UserResource;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class OrganisationController extends Controller
@@ -151,7 +152,11 @@ class OrganisationController extends Controller
         //     return response()->success(OrganisationResource::collection(Organisation::all()));
         // }
         // return response()->success(OrganisationResource::collection(Organisation::where('id', $request->user()->current_organisation_id)));
-        return response()->success(OrganisationResource::collection(Organisation::all()));
+        return response()->success(OrganisationResource::collection(
+            Cache::remember('organisation_listing_controller',now()->addHours(2), function () {
+            return Organisation::all();
+            }) 
+        ));
     }
 
     public function listOrganisationUsers(Request $request, $id)
