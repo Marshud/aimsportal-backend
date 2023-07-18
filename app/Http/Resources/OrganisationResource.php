@@ -24,7 +24,7 @@ class OrganisationResource extends JsonResource
             'contact_person_email' => $this->contact_person_email,
             'approved' => $this->approved,
             'number_of_users' => 0,//$this->whenLoaded('team_users',$this->team_users->count()),
-            'category' => $this->category->name ?? 'none',
+            'category' => 'none',//$this->category->name ?? 'none',
             'category_id' => $this->category_id,
             'description' => $this->description,
             'iati_org_id' => $this->iati_org_id,
