@@ -23,7 +23,7 @@ class OrganisationResource extends JsonResource
             'contact_person_name' => $this->contact_person_name,
             'contact_person_email' => $this->contact_person_email,
             'approved' => $this->approved,
-            'number_of_users' => $this->whenLoaded('team_users',$this->team_users->count()),
+            'number_of_users' => 0,//$this->whenLoaded('team_users',$this->team_users->count()),
             'category' => $this->category->name ?? 'none',
             'category_id' => $this->category_id,
             'description' => $this->description,
@@ -31,7 +31,7 @@ class OrganisationResource extends JsonResource
             'iati_org_type' => $this->iati_org_type,
             'type' => $this->iati_type()->name ?? null,
             'country' => $this->country,
-            'audits' => (can_see_audits()) ? $this->audits : '',
+            'audits' => (can_see_audits()) ? []: '',
         ];
     }
     
