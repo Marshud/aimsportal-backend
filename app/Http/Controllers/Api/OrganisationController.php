@@ -157,6 +157,9 @@ class OrganisationController extends Controller
             return Organisation::all();
             }) 
         ));
+
+        //return response()->success(OrganisationResource::collection(Organisation::all())); 
+        
     }
 
     public function listOrganisationUsers(Request $request, $id)
