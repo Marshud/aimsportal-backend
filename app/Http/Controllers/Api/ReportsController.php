@@ -41,7 +41,7 @@ class ReportsController extends Controller
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
-        $report = Cache::remember('report_funding_trends',now()->addHours(3), function () use($currency, $no_of_years) {
+        $report = Cache::remember('report_funding_trends', 180 * 60, function () use($currency, $no_of_years) {
 
             return DB::table('projects')
                 ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
@@ -72,7 +72,7 @@ class ReportsController extends Controller
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
-        $report = Cache::remember('report_budgeting_trends',now()->addHours(3), function () use($currency, $no_of_years) {
+        $report = Cache::remember('report_budgeting_trends', 180 * 60, function () use($currency, $no_of_years) {
 
             return DB::table('projects')
             ->join('project_budgets', 'projects.id', '=', 'project_budgets.project_id')
@@ -104,7 +104,7 @@ class ReportsController extends Controller
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
-        $report = Cache::remember('report_funding_by_sector',now()->addHours(3), function () use($currency, $limit) {
+        $report = Cache::remember('report_funding_by_sector', 180 * 60, function () use($currency, $limit) {
 
             return DB::table('projects')
             ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
