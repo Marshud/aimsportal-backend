@@ -11,6 +11,9 @@ You can approve or reject the user from joining your organisation. their details
 
 </x-mail::table>
 
+<x-mail::button :url="$frontEndUrl">
+Approve
+</x-mail::button>
 
 Thanks,<br>
 {{ config('app.name') }}
