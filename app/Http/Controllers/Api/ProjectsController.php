@@ -749,8 +749,8 @@ class ProjectsController extends Controller
     {
         
         $builder = Cache::remember('project_listing_search', 30 * 60, function () {
-
-            Project::where(function ($q) {
+            
+          return  Project::where(function ($q) {
             if (request()->has('organisation') && request()->filled('organisation')) {
                 $q->whereHas('participating_organisations', function ($q) {
                     $q->where('organisation_id', request()->get('organisation'));
@@ -806,7 +806,7 @@ class ProjectsController extends Controller
                 });
             }
             
-        });
+            });
         });
        
 
