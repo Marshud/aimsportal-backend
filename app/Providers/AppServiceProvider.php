@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Schema;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -46,6 +47,10 @@ class AppServiceProvider extends ServiceProvider
         });
 
        // CodelistTranslationResource::withoutWrapping();
-    Model::preventLazyLoading(! $this->app->isProduction());
+        Model::preventLazyLoading(! $this->app->isProduction());
+
+        Sanctum::$accessTokenAuthenticationCallback = function ($accessToken, $isValid) {
+            return !$accessToken->last_used_at || $accessToken->last_used_at->gte(now()->subMinutes(config('sanctum.expiration')));
+        };
     }
 }

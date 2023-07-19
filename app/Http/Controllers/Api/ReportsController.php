@@ -144,7 +144,9 @@ class ReportsController extends Controller
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
-       $report = DB::table('projects')
+        $report = Cache::remember('report_funding_by_source', 180 * 60, function () use($currency, $limit) {
+
+            return DB::table('projects')
             ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
             ->join('project_transaction_provider_org', 'project_transactions.id', '=', 'project_transaction_provider_org.project_transaction_id')
             ->selectRaw('project_transaction_provider_org.organisation_id as organisation, ROUND(sum(value_amount)/1000000, 0) as data')
@@ -153,6 +155,8 @@ class ReportsController extends Controller
             ->orderBy('data', 'desc')
             ->limit($limit)
             ->get();
+        });
+
         $filtered = $report->map(function ($item) {
             return [
                 'organisation' => Organisation::find($item->organisation)->name ?? 'unknown',
@@ -177,7 +181,9 @@ class ReportsController extends Controller
             return response()->error(__('messages.invalid_request'), 422, $validator->messages()->toArray());
         }
 
-       $report = DB::table('projects')
+        $report = Cache::remember('report_funding_by_state', 180 * 60, function () use($currency) {
+
+            return DB::table('projects')
             ->join('project_transactions', 'projects.id', '=', 'project_transactions.project_id')
             ->join('project_locations', 'projects.id', '=', 'project_locations.project_id')
             ->selectRaw('project_locations.state_id as state, ROUND(sum(value_amount)/1000000,0) as data')
@@ -186,6 +192,8 @@ class ReportsController extends Controller
            // ->orderBy('data', 'desc')
             //->limit($no_of_years)
             ->get();
+        });
+
         $filtered = $report->map(function ($item) {
             return [
                 'state' => State::find($item->state)->name ?? 'none',
